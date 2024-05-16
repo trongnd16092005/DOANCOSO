@@ -19,6 +19,8 @@
     import javafx.stage.Stage;
     import java.io.IOException;
     import java.net.URL;
+    import java.security.MessageDigest;
+    import java.security.NoSuchAlgorithmException;
     import java.sql.Connection;
     import java.sql.PreparedStatement;
     import java.sql.ResultSet;
@@ -139,7 +141,8 @@
         public void validateLoginAdmin(ActionEvent event){
             DataBaseConnection connectNow=new DataBaseConnection();
             Connection connectDatabase=connectNow.getConnection();
-            String verifyLogin="SELECT count(1) FROM loginadmin WHERE ADMINNAME='"+usernameField.getText()+"'AND PASSWORD='"+passwordField.getText()+"'";
+            String hexPass =md5(passwordField.getText());
+            String verifyLogin="SELECT count(1) FROM loginadmin WHERE ADMINNAME='"+usernameField.getText()+"'AND PASSWORD='"+hexPass+"'";
             try {
                 Statement statement=connectDatabase.createStatement();
                 ResultSet queryResult=statement.executeQuery(verifyLogin);
@@ -157,7 +160,8 @@
         public void validateLoginUser(ActionEvent event){
             DataBaseConnection connectNow=new DataBaseConnection();
             Connection connectDatabase=connectNow.getConnection();
-            String verifyLogin="SELECT count(1) FROM loginuser WHERE USERNAME='"+usernameField.getText()+"'AND PASSWORD='"+passwordField.getText()+"'";
+            String hexPass =md5(passwordField.getText());
+            String verifyLogin="SELECT count(1) FROM loginuser WHERE USERNAME='"+usernameField.getText()+"'AND PASSWORD='"+hexPass+"'";
             try {
                 Statement statement=connectDatabase.createStatement();
                 ResultSet queryResult=statement.executeQuery(verifyLogin);
@@ -291,8 +295,9 @@
                 else if(changePassword.getText().equals(changePass2.getText())){
                     String changeP="UPDATE appmuaban.loginuser SET PASSWORD=? WHERE USERNAME=?";
                     try {
+                        String hexpass =md5(changePassword.getText());
                         PreparedStatement preparedStatement=connectDatabase.prepareStatement(changeP);
-                        preparedStatement.setString(1,changePassword.getText());
+                        preparedStatement.setString(1,hexpass);
                         preparedStatement.setString(2,userNameForgot.getText());
                         int rowAffected=preparedStatement.executeUpdate();
                         if(rowAffected>0){
@@ -331,10 +336,11 @@
                     else  if(queryResult.getInt(1)==1){
                         labelCreate.setText("Please change Username");
                     } else{
+                        String hexpass =md5(passCreate.getText());
                         String stringCreateAcc="INSERT INTO appmuaban.loginuser(USERNAME,PASSWORD,PNUMBER,QUESTION,ANSWER,FIRSTNAME,LASTNAME) VALUES(?,?,?,?,?,?,?)";
                         PreparedStatement preparedStatement=connectDatabase.prepareStatement(stringCreateAcc);
                         preparedStatement.setString(1,userCreate.getText());
-                        preparedStatement.setString(2,passCreate.getText());
+                        preparedStatement.setString(2,hexpass);
                         preparedStatement.setString(3,numberCreate.getText());
                         preparedStatement.setString(4,(String) questionCreate.getValue());
                         preparedStatement.setString(5,answerCreate.getText());
@@ -352,6 +358,18 @@
             }catch (Exception e){
                 throw new RuntimeException(e);
 
+            }
+        }public static String md5(String input) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                byte[] messageDigest = md.digest(input.getBytes());
+                StringBuilder sb = new StringBuilder();
+                for (byte b : messageDigest) {
+                    sb.append(String.format("%02x", b));
+                }
+                return sb.toString();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
             }
         }
     }

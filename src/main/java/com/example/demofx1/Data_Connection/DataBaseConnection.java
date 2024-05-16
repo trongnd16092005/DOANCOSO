@@ -2,9 +2,7 @@ package com.example.demofx1.Data_Connection;
 
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.Statement;
 
 public class DataBaseConnection {
     public Connection databaseLink;
