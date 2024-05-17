@@ -67,6 +67,10 @@ public class HomeAdminController implements Initializable {
     @FXML
     Button products;
     @FXML
+    Button POS;
+    @FXML
+    AnchorPane POSPane;
+    @FXML
     Button signOutButton;
     @FXML
     Label nameAdminHome;
@@ -141,7 +145,8 @@ public class HomeAdminController implements Initializable {
         totalIncomeTable.setVisible(false);
         todayIncomeTable.setVisible(false);
 
-        incomePane.setVisible(true);
+        POSPane.setVisible(true);
+        incomePane.setVisible(false);
         productsPane.setVisible(false);
 
         addProPane.setVisible(true);
@@ -330,10 +335,12 @@ public class HomeAdminController implements Initializable {
         if(event.getSource()==income){
             incomePane.setVisible(true);
             productsPane.setVisible(false);
+            POSPane.setVisible(false);
         }
         if(event.getSource()==products){
             productsPane.setVisible(true);
             incomePane.setVisible(false);
+            POSPane.setVisible(false);
             addProPane.setVisible(true);
             changeProPane.setVisible(false);
             addProBut.setDisable(true);
@@ -372,6 +379,11 @@ public class HomeAdminController implements Initializable {
             changeProBut.setDisable(true);
             productTable.getSelectionModel().clearSelection();
             clearProductPane();
+        }
+        if(event.getSource()==POS){
+            incomePane.setVisible(false);
+            productsPane.setVisible(false);
+            POSPane.setVisible(true);
         }
     }
     public void setVisibleIncomeChart(){
@@ -541,4 +553,5 @@ public class HomeAdminController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
 }

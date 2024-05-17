@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -34,7 +35,7 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <Button fx:id="income" layoutX="13.0" layoutY="251.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Income">
+                        <Button fx:id="income" layoutX="10.0" layoutY="308.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Income">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -60,12 +61,28 @@
                               <Image url="file:C:\Users\Admin\IdeaProjects\BAMBOO\src\main\resources\com\example\demofx1\Images\bamboo.png" />
                            </image>
                         </ImageView>
-                        <Button fx:id="products" layoutX="11.0" layoutY="309.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Products">
+                        <Button fx:id="products" layoutX="13.0" layoutY="366.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Products">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                            <graphic>
                               <FontIcon iconLiteral="fa-product-hunt" />
+                           </graphic>
+                        </Button>
+                        <Button layoutX="14.0" layoutY="419.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Customer">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <graphic>
+                              <FontIcon iconLiteral="fab-cuttlefish" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="POS" layoutX="10.0" layoutY="256.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="POS">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <graphic>
+                              <FontIcon iconLiteral="fa-cart-plus" />
                            </graphic>
                         </Button>
 
@@ -167,7 +184,7 @@
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="productsPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                              <AnchorPane fx:id="productsPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                                  <children>
                                     <AnchorPane layoutX="1.6" layoutY="1.6" prefHeight="181.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                                        <children>
@@ -248,6 +265,59 @@
                                           </TableView>
                                        </children>
                                     </AnchorPane>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="POSPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0">
+                                 <children>
+                                    <AnchorPane prefHeight="523.0" prefWidth="250.0" style="-fx-border-color: #b4b4b4; -fx-border-style: dashed; -fx-border-radius: 4;" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+                                       <children>
+                                          <Label layoutX="22.0" layoutY="118.0" text="Product Name:" />
+                                          <TextField layoutX="103.0" layoutY="114.0" />
+                                          <Label layoutX="44.0" layoutY="156.0" text="Product ID:" />
+                                          <TextField layoutX="103.0" layoutY="152.0" />
+                                          <Spinner layoutX="102.0" layoutY="182.0" prefHeight="26.0" prefWidth="81.0" />
+                                          <Label layoutX="50.0" layoutY="187.0" text="Quantity:" />
+                                          <Button layoutX="153.0" layoutY="274.0" mnemonicParsing="false" style="-fx-background-color: #3cb371;" text="ADD">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                          <Button layoutX="163.0" layoutY="364.0" mnemonicParsing="false" prefWidth="74.0" style="-fx-background-color: #ffa500;" text="PAY">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                          <Label layoutX="38.0" layoutY="323.0" text="Total:">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="85.0" layoutY="323.0" prefHeight="30.0" prefWidth="114.0" text="VND">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Button layoutX="42.0" layoutY="274.0" mnemonicParsing="false" style="-fx-background-color: #ff6347;" text="RESET">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                          <Label fx:id="alertLabel" layoutX="75.0" layoutY="242.0" prefHeight="18.0" prefWidth="136.0" textFill="RED" />
+                                          <Label layoutX="52.0" layoutY="215.0" text="Price/1:" />
+                                          <TextField disable="true" layoutX="103.0" layoutY="211.0" promptText="0" />
+                                          <Button fx:id="viewCartBut" layoutX="21.0" layoutY="364.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: #00ffff;" text="VIEW CART" AnchorPane.bottomAnchor="117.59999999999997" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="364.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                          <Button layoutX="21.0" layoutY="421.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: #00ffff;" text="SHOW ALL" AnchorPane.bottomAnchor="118.39999999999989">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane layoutX="7.2" layoutY="14.0" prefHeight="533.0" prefWidth="587.0" style="-fx-border-color: #b4b4b4; -fx-border-style: dashed; -fx-border-radius: 4;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="273.0" AnchorPane.topAnchor="5.0" />
                                  </children>
                               </AnchorPane>
                            </children>
