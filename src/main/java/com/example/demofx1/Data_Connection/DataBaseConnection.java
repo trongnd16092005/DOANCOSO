@@ -8,9 +8,9 @@ public class DataBaseConnection {
     public Connection databaseLink;
     public Connection getConnection(){
         String databaseName="appmuaban";
-        String databaseAdmin="hoang";
-        String databasePasswordAd="qazqaz123123";
-        String serverIP = "192.168.111.123";
+        String databaseAdmin="root";
+        String databasePasswordAd="1234";
+        String serverIP = "35.232.248.37";
 
         String url = "jdbc:mysql://" + serverIP + "/" + databaseName;
         try {
