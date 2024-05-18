@@ -16,7 +16,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
@@ -317,7 +319,118 @@
                                           </Button>
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane layoutX="7.2" layoutY="14.0" prefHeight="533.0" prefWidth="587.0" style="-fx-border-color: #b4b4b4; -fx-border-style: dashed; -fx-border-radius: 4;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="273.0" AnchorPane.topAnchor="5.0" />
+                                    <AnchorPane layoutX="7.2" layoutY="14.0" prefHeight="533.0" prefWidth="587.0" style="-fx-border-color: #b4b4b4; -fx-border-style: dashed; -fx-border-radius: 4;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="273.0" AnchorPane.topAnchor="5.0">
+                                       <children>
+                                          <AnchorPane layoutX="205.0" layoutY="14.0" prefHeight="175.0" prefWidth="175.0" style="-fx-background-color: #ffffff;" AnchorPane.topAnchor="5.0">
+                                             <children>
+                                                <VBox layoutY="-50.0" prefHeight="175.0" prefWidth="190.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <HBox prefHeight="25.0" prefWidth="175.0">
+                                                         <children>
+                                                            <Label prefHeight="31.0" prefWidth="109.0" text="TÊN SẢN PHẨM">
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <Label prefHeight="25.0" prefWidth="56.0" text="GIÁ">
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <AnchorPane prefHeight="111.0" prefWidth="175.0">
+                                                         <children>
+                                                            <ImageView fitHeight="111.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                         <children>
+                                                            <Spinner prefHeight="26.0" prefWidth="73.0" />
+                                                            <Button mnemonicParsing="false" text="ADD" />
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane layoutX="427.0" layoutY="-3.0" prefHeight="175.0" prefWidth="175.0" style="-fx-background-color: #000000;" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                             <children>
+                                                <VBox layoutY="-50.0" prefHeight="175.0" prefWidth="190.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <HBox prefHeight="25.0" prefWidth="175.0">
+                                                         <children>
+                                                            <Label prefHeight="31.0" prefWidth="109.0" text="TÊN SẢN PHẨM">
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <Label prefHeight="25.0" prefWidth="56.0" text="GIÁ">
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <AnchorPane prefHeight="111.0" prefWidth="175.0">
+                                                         <children>
+                                                            <ImageView fitHeight="111.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                         <children>
+                                                            <Spinner prefHeight="26.0" prefWidth="73.0" />
+                                                            <Button mnemonicParsing="false" text="ADD" />
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                          <AnchorPane prefHeight="175.0" prefWidth="175.0" style="-fx-background-color: #000000;" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                             <children>
+                                                <VBox layoutY="-50.0" prefHeight="175.0" prefWidth="190.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <HBox prefHeight="25.0" prefWidth="175.0">
+                                                         <children>
+                                                            <Label prefHeight="31.0" prefWidth="109.0" text="TÊN SẢN PHẨM">
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <Label prefHeight="25.0" prefWidth="56.0" text="GIÁ">
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" right="5.0" top="5.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <AnchorPane prefHeight="111.0" prefWidth="175.0">
+                                                         <children>
+                                                            <ImageView fitHeight="111.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                         <children>
+                                                            <Spinner prefHeight="26.0" prefWidth="73.0" />
+                                                            <Button mnemonicParsing="false" text="ADD" />
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </AnchorPane>
                            </children>
