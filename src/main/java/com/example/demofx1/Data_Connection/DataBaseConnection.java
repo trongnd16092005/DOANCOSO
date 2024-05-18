@@ -8,12 +8,14 @@ public class DataBaseConnection {
     public Connection databaseLink;
     public Connection getConnection(){
         String databaseName="appmuaban";
-        String databaseAdmin="root";
+        String databaseAdmin="hoang";
         String databasePasswordAd="qazqaz123123";
-        String urlAdmin="jdbc:mysql://localhost/"+databaseName;
+        String serverIP = "192.168.111.123";
+
+        String url = "jdbc:mysql://" + serverIP + "/" + databaseName;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            databaseLink= DriverManager.getConnection(urlAdmin,databaseAdmin,databasePasswordAd);
+            databaseLink= DriverManager.getConnection(url,databaseAdmin,databasePasswordAd);
         }catch (Exception e) {
             e.printStackTrace();
         }
