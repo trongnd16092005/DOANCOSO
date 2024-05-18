@@ -10,7 +10,7 @@ public class DataBaseConnection {
         String databaseName="appmuaban";
         String databaseAdmin="root";
         String databasePasswordAd="qazqaz123123";
-        String urlAdmin="jdbc:mysql://192.168.111.123/"+databaseName;
+        String urlAdmin="jdbc:mysql://localhost/"+databaseName;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             databaseLink= DriverManager.getConnection(urlAdmin,databaseAdmin,databasePasswordAd);
