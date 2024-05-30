@@ -1,4 +1,4 @@
-package com.example.demofx1.Data_Connection;
+package com.example.demofx1.MODEL;
 
 
 import java.sql.Connection;

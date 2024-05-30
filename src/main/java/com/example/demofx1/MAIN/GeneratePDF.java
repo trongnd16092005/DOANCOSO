@@ -1,7 +1,7 @@
-package com.example.demofx1.Main;
+package com.example.demofx1.MAIN;
 
-import com.example.demofx1.Controller.HomeAdminController;
-import com.example.demofx1.Data_Connection.ProductData;
+import com.example.demofx1.CONTROLLER.HomeAdminController;
+import com.example.demofx1.MODEL.ProductData;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -121,7 +121,7 @@ public class GeneratePDF extends Application {
             document.add(threeColTable1);
 
             String controllerName = "HomeAdminController";
-            String fxmlPath = "/com/example/demofx1/FXML/" + controllerName.replace("Controller", "") + ".fxml";
+            String fxmlPath = "/com/example/demofx1/VIEW/" + controllerName.replace("Controller", "") + ".fxml";
 
             // Lấy URL của tệp FXML
             URL url = getClass().getResource(fxmlPath);

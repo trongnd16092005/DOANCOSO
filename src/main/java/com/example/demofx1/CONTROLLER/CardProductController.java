@@ -1,7 +1,7 @@
-package com.example.demofx1.Controller;
+package com.example.demofx1.CONTROLLER;
 
-import com.example.demofx1.Data_Connection.DataBaseConnection;
-import com.example.demofx1.Data_Connection.ProductData;
+import com.example.demofx1.MODEL.DataBaseConnection;
+import com.example.demofx1.MODEL.ProductData;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -79,7 +79,7 @@ public class CardProductController implements Initializable {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/HomeAdmin.fxml"));
+        loader.setLocation(getClass().getResource("/com/example/demofx1/VIEW/HomeAdmin.fxml"));
         Parent root = loader.load();
         HomeAdminController homeAdminController = loader.getController();
 

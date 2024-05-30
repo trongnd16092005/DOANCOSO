@@ -1,6 +1,6 @@
-package com.example.demofx1.Main;
+package com.example.demofx1.MAIN;
 
-import com.example.demofx1.Controller.HomeAdminController;
+import com.example.demofx1.CONTROLLER.HomeAdminController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,9 +20,8 @@ public class AdminHomeMain extends Application {
     public void start(Stage primaryStage) {
         try {
             String controllerName = "HomeAdminController";
-            String fxmlPath = "/com/example/demofx1/FXML/" + controllerName.replaceAll("Controller", "") + ".fxml";
+            String fxmlPath = "/com/example/demofx1/VIEW/" + controllerName.replaceAll("Controller", "") + ".fxml";
 
-            // Lấy URL của tệp FXML
             URL url = getClass().getResource(fxmlPath);
             if (url != null) {
                 FXMLLoader loader = new FXMLLoader(url);
@@ -30,9 +29,6 @@ public class AdminHomeMain extends Application {
                 HomeAdminController controller=loader.getController();
                 controller.clearBillProductData();
 
-//            FXMLLoader loader=new FXMLLoader();
-//            loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/HomeAdmin.fxml"));
-//            Parent root = loader.load();//FXMLLoader.load(getClass().getResource("/com/example/demofx1/FXML/HomeAdmin.fxml"));
                 Scene scene=new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
