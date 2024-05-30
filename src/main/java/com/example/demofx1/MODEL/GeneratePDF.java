@@ -1,7 +1,6 @@
-package com.example.demofx1.MAIN;
+package com.example.demofx1.MODEL;
 
 import com.example.demofx1.CONTROLLER.HomeAdminController;
-import com.example.demofx1.MODEL.ProductData;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
