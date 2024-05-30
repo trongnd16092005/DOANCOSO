@@ -14,10 +14,13 @@
     import javafx.scene.Parent;
     import javafx.scene.Scene;
     import javafx.scene.control.*;
+    import javafx.scene.image.Image;
+    import javafx.scene.image.ImageView;
     import javafx.scene.layout.AnchorPane;
     import javafx.scene.layout.VBox;
     import javafx.stage.Stage;
     import java.io.IOException;
+    import java.io.InputStream;
     import java.net.URL;
     import java.security.MessageDigest;
     import java.security.NoSuchAlgorithmException;
@@ -103,6 +106,8 @@
         TextField fNameCreate;
         @FXML
         TextField lNameCreate;
+        @FXML
+        ImageView img;
 
         private final String[] questionList={"What is your favourite food?","What is your favourite color?"};
         public void question(){
@@ -114,6 +119,19 @@
         }
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle){
+            InputStream inputStream = getClass().getResourceAsStream("resources/com/example/demofx1/Images/logo.png");
+
+            if (inputStream != null) {
+                // Tạo hình ảnh từ InputStream
+                Image image = new Image(inputStream);
+
+                // Đặt hình ảnh cho img
+                img.setImage(image);
+            } else {
+                // InputStream không tồn tại, xử lý lỗi ở đây
+                System.out.println("Không thể tải hình ảnh");
+            }
+
             question();
             forgotPassPane.setVisible(false);
             createPane.setVisible(false);

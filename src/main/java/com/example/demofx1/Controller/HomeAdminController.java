@@ -1,9 +1,10 @@
 package com.example.demofx1.Controller;
 
-import com.example.demofx1.Data_Connection.AdminData;
-import com.example.demofx1.Data_Connection.DataBaseConnection;
-import com.example.demofx1.Data_Connection.PaymentData;
-import com.example.demofx1.Data_Connection.ProductData;
+import com.example.demofx1.Data_Connection.*;
+import com.example.demofx1.Main.GeneratePDF;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,57 +18,68 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.*;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class HomeAdminController implements Initializable {
     @FXML
-    TableView<PaymentData>totalIncomeTable;
+    TableView<PaymentData> totalIncomeTable;
     @FXML
-    TableColumn<PaymentData,Integer>idPayment;
+    TableColumn<PaymentData, Integer> idPayment;
     @FXML
-    TableColumn<PaymentData,String>IDUserPayment;
+    TableColumn<PaymentData, String> IDUserPayment;
     @FXML
-    TableColumn<PaymentData,Integer>amountPayment;
+    TableColumn<PaymentData, Integer> amountPayment;
     @FXML
-    TableColumn<PaymentData,LocalDateTime>datePayment;
+    TableColumn<PaymentData, LocalDateTime> datePayment;
     @FXML
-    TableView<PaymentData>todayIncomeTable;
+    TableView<PaymentData> todayIncomeTable;
     @FXML
-    TableColumn<PaymentData,Integer>todayIDPayment;
+    TableColumn<PaymentData, Integer> todayIDPayment;
     @FXML
-    TableColumn<PaymentData,String>todayIDUserPayment;
+    TableColumn<PaymentData, String> todayIDUserPayment;
     @FXML
-    TableColumn<PaymentData,Integer>todayAmountPayment;
+    TableColumn<PaymentData, Integer> todayAmountPayment;
     @FXML
-    TableColumn<PaymentData,LocalDateTime>todayDatePayment;
+    TableColumn<PaymentData, LocalDateTime> todayDatePayment;
     @FXML
-    TableView<ProductData>productTable;
+    TableView<ProductData> productTable;
     @FXML
-    TableColumn<PaymentData,Integer>idProductCol;
+    TableColumn<PaymentData, Integer> idProductCol;
     @FXML
-    TableColumn<PaymentData,String>nameProductCol;
+    TableColumn<PaymentData, String> nameProductCol;
     @FXML
-    TableColumn<PaymentData,String>manufacturerCol;
+    TableColumn<PaymentData, String> manufacturerCol;
     @FXML
-    TableColumn<PaymentData,Integer>priceCol;
+    TableColumn<PaymentData, Integer> priceCol;
     @FXML
-    TableColumn<PaymentData,String>statusCol;
+    TableColumn<PaymentData, String> imageCol;//status
     @FXML
     Button income;
     @FXML
     Button products;
     @FXML
     Button POS;
+    @FXML
+    ImageView imageView;
     @FXML
     AnchorPane POSPane;
     @FXML
@@ -100,8 +112,7 @@ public class HomeAdminController implements Initializable {
     TextField nameADDText;
     @FXML
     TextField IDADDText;
-    @FXML
-    ComboBox statusCBox;
+
     @FXML
     Label alertADDPro;
     @FXML
@@ -117,8 +128,6 @@ public class HomeAdminController implements Initializable {
     @FXML
     AnchorPane changeProPane;
     @FXML
-    ComboBox changeStatusCBox;
-    @FXML
     TextField IDChangeText;
     @FXML
     TextField nameChangeText;
@@ -133,14 +142,102 @@ public class HomeAdminController implements Initializable {
     @FXML
     Button confirmChangeBut;
     @FXML
-    LineChart<String,Number> lineIncomeChart;
-    private final String[] statusString={"Available","Not Available"};
+    LineChart<String, Number> lineIncomeChart;
+
+    @FXML
+    GridPane menuGridPane;
+    @FXML
+    TextField searchField;
+    @FXML
+    TableView<ProductData> cartTable;
+    @FXML
+    TableColumn<ProductData, Integer> qCol;
+    @FXML
+    TableColumn<ProductData, String> nameCartCol;
+    @FXML
+    TableColumn<ProductData, Integer> pCol;
+    @FXML
+    Label totalLabel;
+    @FXML
+    ImageView addImageView;
+    @FXML
+    ImageView changeImageView;
+    @FXML
+    Button chooseImg;
+    @FXML
+    Button chooseImg1;
+    @FXML
+    TableView<CustomerData> customerTable;
+    @FXML
+    TableColumn<CustomerData, String> nameCol;
+    @FXML
+    TableColumn<CustomerData, String> phoneCol;
+    @FXML
+    TableColumn<CustomerData, Integer> totalSpentCol;
+    @FXML
+    Button deleteCusBut;
+    @FXML
+    Button addCusBut;
+    @FXML
+    AnchorPane deleteCusPane;
+    @FXML
+    AnchorPane ADDCusPane;
+    @FXML
+    TextField CusNameDELETE;
+    @FXML
+    TextField CusPNumDELETE;
+    @FXML
+    Button confirmDELETECus;
+    @FXML
+    TextField ADDCusName;
+    @FXML
+    TextField ADDCusPNum;
+    @FXML
+    Button confirmADDCus;
+    @FXML
+    Button customerBut;
+    @FXML
+    AnchorPane CustomerPane;
+
+    private ObservableList<CustomerData> customerList;
+
+    @FXML
+    TextField customerField;
+    private final String destDirectoryPath = "C:\\Users\\Admin\\IdeaProjects\\BAMBOO\\src\\main\\resources\\com\\example\\demofx1\\Images";
+    private Stage stage;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    private Timeline timeline;
+
+    public String urlImage = "";
+    ObservableList<ProductData> cardListData = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setIncomeChart();
         setLabelOfIncome();
-        setStatus();
+
+        menuDisplayCard();
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterProductList(newValue);
+        });
+
+        showViewProductList();
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            showViewProductList();
+            totalLabel.setText(getTotalPrice() + "VND");
+            setLabelOfIncome();
+        }));
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
         nameOrID();
+        nameOrIDCus();
         lineIncomeChart.setVisible(true);
         totalIncomeTable.setVisible(false);
         todayIncomeTable.setVisible(false);
@@ -148,51 +245,55 @@ public class HomeAdminController implements Initializable {
         POSPane.setVisible(true);
         incomePane.setVisible(false);
         productsPane.setVisible(false);
+        CustomerPane.setVisible(false);
+
+        deleteCusBut.setDisable(true);
+        addCusBut.setDisable(false);
+        deleteCusPane.setVisible(false);
+        ADDCusPane.setVisible(true);
 
         addProPane.setVisible(true);
         deleteProPane.setVisible(false);
+        InputStream inputStream = getClass().getResourceAsStream("/com/example/demofx1/Images/bamboo.png");
     }
-    public void setStatus(){
-        List<String> listS=new ArrayList<>();
-        Collections.addAll(listS,statusString);
-        ObservableList listData =FXCollections.observableArrayList(listS);
-        statusCBox.setItems(listData);
-        changeStatusCBox.setItems(listData);
-    }
+
     public void signOutAcc(ActionEvent event) throws IOException {
-        Stage stage=(Stage) ((Node) event.getSource()).getScene().getWindow();
-        FXMLLoader loader=new FXMLLoader();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/LoginScreen.fxml"));
-        Parent signInView=loader.load();
-        Scene scene=new Scene(signInView);
+        Parent signInView = loader.load();
+        Scene scene = new Scene(signInView);
         stage.setY(170);
         stage.setX(350);
         stage.setScene(scene);
     }
-    public void setNameAdminHome(AdminData data){
+
+    public void setNameAdminHome(AdminData data) {
         nameAdminHome.setText(data.getFName());
     }
-    public void setIncomeChart(){
-        LocalDateTime currentDateTime=LocalDateTime.now();
-        int month=currentDateTime.getMonthValue();
-        XYChart.Series<String,Number> series=new XYChart.Series<>();
-        XYChart.Data<String,Number> fourMAgo=new XYChart.Data<>(changeMonthToString(month-4),getIncomePerM(month-4));
-        XYChart.Data<String,Number> threeMAgo=new XYChart.Data<>(changeMonthToString(month-3),getIncomePerM(month-3));
-        XYChart.Data<String,Number> twoMAgo=new XYChart.Data<>(changeMonthToString(month-2),getIncomePerM(month-2));
-        XYChart.Data<String,Number> oneMAgo=new XYChart.Data<>(changeMonthToString(month-1),getIncomePerM(month-1));
-        XYChart.Data<String,Number> nowM=new XYChart.Data<>(changeMonthToString(month),getIncomePerM(month));
-        series.getData().addAll(fourMAgo,threeMAgo,twoMAgo,oneMAgo,nowM);
+
+    public void setIncomeChart() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        int month = currentDateTime.getMonthValue();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        XYChart.Data<String, Number> fourMAgo = new XYChart.Data<>(changeMonthToString(month - 4), getIncomePerM(month - 4));
+        XYChart.Data<String, Number> threeMAgo = new XYChart.Data<>(changeMonthToString(month - 3), getIncomePerM(month - 3));
+        XYChart.Data<String, Number> twoMAgo = new XYChart.Data<>(changeMonthToString(month - 2), getIncomePerM(month - 2));
+        XYChart.Data<String, Number> oneMAgo = new XYChart.Data<>(changeMonthToString(month - 1), getIncomePerM(month - 1));
+        XYChart.Data<String, Number> nowM = new XYChart.Data<>(changeMonthToString(month), getIncomePerM(month));
+        series.getData().addAll(fourMAgo, threeMAgo, twoMAgo, oneMAgo, nowM);
         series.setName("Income per month");
         lineIncomeChart.getData().add(series);
     }
-    public String changeMonthToString(int month){
-        if(month==-3)
+
+    public String changeMonthToString(int month) {
+        if (month == -3)
             return "Sep";
-        if(month==-2)
+        if (month == -2)
             return "Oct";
-        if(month==-1)
+        if (month == -1)
             return "Nov";
-        if(month==0)
+        if (month == 0)
             return "Dev";
         return switch (month) {
             case 1 -> "Jan";
@@ -209,57 +310,60 @@ public class HomeAdminController implements Initializable {
             default -> "Dec";
         };
     }
-    public int getIncomePerM(int month){
-        LocalDateTime currentDateTime=LocalDateTime.now();
-        int year=currentDateTime.getYear();
-        if(month<1)
-            year-=1;
-        if(month==-3)
-            month=9;
-        if(month==-2)
-            month=10;
-        if(month==-1)
-            month=11;
-        if(month==0)
-            month=12;
-        int totalPerM=0;
-        DataBaseConnection dataBaseConnection=new DataBaseConnection();
-        Connection connection= dataBaseConnection.getConnection();
-        String search="SELECT * FROM appmuaban.payments WHERE MONTH(date)="+month;
+
+    public int getIncomePerM(int month) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        int year = currentDateTime.getYear();
+        if (month < 1)
+            year -= 1;
+        if (month == -3)
+            month = 9;
+        if (month == -2)
+            month = 10;
+        if (month == -1)
+            month = 11;
+        if (month == 0)
+            month = 12;
+        int totalPerM = 0;
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        String search = "SELECT * FROM appmuaban.payments WHERE MONTH(date)=" + month;
         try {
-            PreparedStatement preparedStatement= connection.prepareStatement(search);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                totalPerM+=resultSet.getInt("amount");
+            PreparedStatement preparedStatement = connection.prepareStatement(search);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                totalPerM += resultSet.getInt("amount");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return totalPerM;
     }
-    public ObservableList<PaymentData> totalPaymentListData(){
-        DataBaseConnection connectNow=new DataBaseConnection();
-        Connection connectDatabase= connectNow.getConnection();
-        ObservableList<PaymentData> paymentList= FXCollections.observableArrayList();
-        String sql="SELECT * FROM appmuaban.payments";
+
+    public ObservableList<PaymentData> totalPaymentListData() {
+        DataBaseConnection connectNow = new DataBaseConnection();
+        Connection connectDatabase = connectNow.getConnection();
+        ObservableList<PaymentData> paymentList = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM appmuaban.payments";
         try {
             PaymentData paymentData;
 
-            PreparedStatement preparedStatement=connectDatabase.prepareStatement(sql);
-            ResultSet result=preparedStatement.executeQuery();
-            while (result.next()){
+            PreparedStatement preparedStatement = connectDatabase.prepareStatement(sql);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
                 java.sql.Timestamp timestamp = result.getTimestamp("date");
-                LocalDateTime localDateTime=timestamp.toLocalDateTime();
-                paymentData=new PaymentData(result.getInt("payment_id"),result.getString("user_id"),result.getInt("amount"),localDateTime);
+                LocalDateTime localDateTime = timestamp.toLocalDateTime();
+                paymentData = new PaymentData(result.getInt("payment_id"), result.getString("user_id"), result.getInt("amount"), localDateTime);
                 paymentList.add(paymentData);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return paymentList;
     }
-    public void showTotalPaymentList(){
-        ObservableList<PaymentData>showTotal=totalPaymentListData();
+
+    public void showTotalPaymentList() {
+        ObservableList<PaymentData> showTotal = totalPaymentListData();
         idPayment.setCellValueFactory(new PropertyValueFactory<>("id"));
         IDUserPayment.setCellValueFactory(new PropertyValueFactory<>("userID"));
         amountPayment.setCellValueFactory(new PropertyValueFactory<>("amount"));
@@ -269,33 +373,35 @@ public class HomeAdminController implements Initializable {
         lineIncomeChart.setVisible(false);
         todayIncomeTable.setVisible(false);
     }
-    public ObservableList<PaymentData> todayPaymentListData(){
-        DataBaseConnection connectNow=new DataBaseConnection();
-        Connection connectDatabase= connectNow.getConnection();
-        LocalDateTime checkTime=LocalDateTime.now();
-        int day=checkTime.getDayOfMonth();
-        int month=checkTime.getMonthValue();
-        int year= checkTime.getYear();
-        ObservableList<PaymentData> paymentList= FXCollections.observableArrayList();
+
+    public ObservableList<PaymentData> todayPaymentListData() {
+        DataBaseConnection connectNow = new DataBaseConnection();
+        Connection connectDatabase = connectNow.getConnection();
+        LocalDateTime checkTime = LocalDateTime.now();
+        int day = checkTime.getDayOfMonth();
+        int month = checkTime.getMonthValue();
+        int year = checkTime.getYear();
+        ObservableList<PaymentData> paymentList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM appmuaban.payments WHERE YEAR(date)=" + year + " AND MONTH(date)=" + month + " AND DAYOFMONTH(date)=" + day;
         try {
             PaymentData paymentData;
 
-            PreparedStatement preparedStatement=connectDatabase.prepareStatement(sql);
-            ResultSet result=preparedStatement.executeQuery();
-            while (result.next()){
+            PreparedStatement preparedStatement = connectDatabase.prepareStatement(sql);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
                 java.sql.Timestamp timestamp = result.getTimestamp("date");
-                LocalDateTime localDateTime=timestamp.toLocalDateTime();
-                paymentData=new PaymentData(result.getInt("payment_id"),result.getString("user_id"),result.getInt("amount"),localDateTime);
+                LocalDateTime localDateTime = timestamp.toLocalDateTime();
+                paymentData = new PaymentData(result.getInt("payment_id"), result.getString("user_id"), result.getInt("amount"), localDateTime);
                 paymentList.add(paymentData);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return paymentList;
     }
-    public void showTodayPaymentList(){
-        ObservableList<PaymentData>showToday=todayPaymentListData();
+
+    public void showTodayPaymentList() {
+        ObservableList<PaymentData> showToday = todayPaymentListData();
         todayIDPayment.setCellValueFactory(new PropertyValueFactory<>("id"));
         todayIDUserPayment.setCellValueFactory(new PropertyValueFactory<>("userID"));
         todayAmountPayment.setCellValueFactory(new PropertyValueFactory<>("amount"));
@@ -305,42 +411,47 @@ public class HomeAdminController implements Initializable {
         lineIncomeChart.setVisible(false);
         todayIncomeTable.setVisible(true);
     }
-    public ObservableList<ProductData> productListData(){
-        DataBaseConnection dataBaseConnection=new DataBaseConnection();
-        Connection connection=dataBaseConnection.getConnection();
-        ObservableList<ProductData> productList=FXCollections.observableArrayList();
-        String sql= "SELECT * FROM appmuaban.product";
+
+    public ObservableList<ProductData> productListData() {
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        ObservableList<ProductData> productList = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM appmuaban.product";
         try {
-            PreparedStatement preparedStatement= connection.prepareStatement(sql);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            while (resultSet.next()){
-                ProductData productData=new ProductData(resultSet.getInt("ID"),resultSet.getString("NAME"), resultSet.getString("MANUFACTURER"),resultSet.getInt("PRICE"),resultSet.getString("STATUS") );
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                ProductData productData = new ProductData(resultSet.getInt("ID"), resultSet.getString("NAME"), resultSet.getString("MANUFACTURER"), resultSet.getInt("PRICE"), resultSet.getString("IMAGE"));
                 productList.add(productData);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return productList;
     }
-    public void setProductTable(){
-        ObservableList<ProductData> showProduct=productListData();
+
+    public void setProductTable() {
+        ObservableList<ProductData> showProduct = productListData();
         idProductCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
         nameProductCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         manufacturerCol.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        imageCol.setCellValueFactory(new PropertyValueFactory<>("image"));
         productTable.setItems(showProduct);
     }
-    public void switchPane(ActionEvent event){
-        if(event.getSource()==income){
+
+    public void switchPane(ActionEvent event) {
+        if (event.getSource() == income) {
             incomePane.setVisible(true);
             productsPane.setVisible(false);
             POSPane.setVisible(false);
+            CustomerPane.setVisible(false);
         }
-        if(event.getSource()==products){
+        if (event.getSource() == products) {
             productsPane.setVisible(true);
             incomePane.setVisible(false);
             POSPane.setVisible(false);
+            CustomerPane.setVisible(false);
             addProPane.setVisible(true);
             changeProPane.setVisible(false);
             addProBut.setDisable(true);
@@ -348,9 +459,13 @@ public class HomeAdminController implements Initializable {
             changeProBut.setDisable(false);
             deleteProPane.setVisible(false);
             productTable.getSelectionModel().clearSelection();
+            urlImage=null;
+            changeImageView.setImage(null);
+            addImageView.setImage(null);
             setProductTable();
+
         }
-        if(event.getSource()==addProBut){
+        if (event.getSource() == addProBut) {
             deleteProPane.setVisible(false);
             addProPane.setVisible(true);
             deleteProBut.setDisable(false);
@@ -358,9 +473,12 @@ public class HomeAdminController implements Initializable {
             changeProPane.setVisible(false);
             changeProBut.setDisable(false);
             productTable.getSelectionModel().clearSelection();
+            urlImage=null;
+            changeImageView.setImage(null);
+            addImageView.setImage(null);
             clearProductPane();
         }
-        if(event.getSource()==deleteProBut){
+        if (event.getSource() == deleteProBut) {
             deleteProPane.setVisible(true);
             addProPane.setVisible(false);
             deleteProBut.setDisable(true);
@@ -368,9 +486,12 @@ public class HomeAdminController implements Initializable {
             changeProPane.setVisible(false);
             changeProBut.setDisable(false);
             productTable.getSelectionModel().clearSelection();
+            urlImage=null;
+            changeImageView.setImage(null);
+            addImageView.setImage(null);
             clearProductPane();
         }
-        if(event.getSource()==changeProBut){
+        if (event.getSource() == changeProBut) {
             addProPane.setVisible(false);
             deleteProPane.setVisible(false);
             changeProPane.setVisible(true);
@@ -378,78 +499,118 @@ public class HomeAdminController implements Initializable {
             deleteProBut.setDisable(false);
             changeProBut.setDisable(true);
             productTable.getSelectionModel().clearSelection();
+            urlImage=null;
+            changeImageView.setImage(null);
+            addImageView.setImage(null);
             clearProductPane();
         }
-        if(event.getSource()==POS){
+        if (event.getSource() == POS) {
             incomePane.setVisible(false);
             productsPane.setVisible(false);
             POSPane.setVisible(true);
+            CustomerPane.setVisible(false);
+            menuDisplayCard();
+        }
+        if(event.getSource()==customerBut){
+            incomePane.setVisible(false);
+            productsPane.setVisible(false);
+            POSPane.setVisible(false);
+            CustomerPane.setVisible(true);
+            addCusBut.setDisable(true);
+            deleteCusBut.setDisable(false);
+            setCustomerTable();
+        }
+        if(event.getSource()==deleteCusBut){
+            deleteCusPane.setVisible(true);
+            ADDCusPane.setVisible(false);
+            addCusBut.setDisable(false);
+            deleteCusBut.setDisable(true);
+
+        }
+        if(event.getSource()==addCusBut){
+            deleteCusPane.setVisible(false);
+            ADDCusPane.setVisible(true);
+            addCusBut.setDisable(true);
+            deleteCusBut.setDisable(false);
         }
     }
-    public void setVisibleIncomeChart(){
+
+
+
+    public void setVisibleIncomeChart() {
         lineIncomeChart.setVisible(true);
         totalIncomeTable.setVisible(false);
         todayIncomeTable.setVisible(false);
     }
-    public void setLabelOfIncome(){
-        DataBaseConnection dataBaseConnection=new DataBaseConnection();
-        Connection connection= dataBaseConnection.getConnection();
-        LocalDateTime localDateTime=LocalDateTime.now();
-        int day=localDateTime.getDayOfMonth();
-        int month=localDateTime.getMonthValue();
-        int year= localDateTime.getYear();
-        int totalIncome=0;
-        int todayIncome=0;
-        String total="SELECT * FROM appmuaban.payments";
+
+    public void setLabelOfIncome() {
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        int day = localDateTime.getDayOfMonth();
+        int month = localDateTime.getMonthValue();
+        int year = localDateTime.getYear();
+        int totalIncome = 0;
+        int todayIncome = 0;
+        String total = "SELECT * FROM appmuaban.payments";
         String today = "SELECT * FROM appmuaban.payments WHERE YEAR(date)=" + year + " AND MONTH(date)=" + month + " AND DAYOFMONTH(date)=" + day;
         try {
-            PreparedStatement todayPreparedStatement= connection.prepareStatement(today);
-            PreparedStatement totalPreparedStatement=connection.prepareStatement(total);
-            ResultSet todayResultSet=todayPreparedStatement.executeQuery();
-            ResultSet totalResultSet=totalPreparedStatement.executeQuery();
-            while (todayResultSet.next()){
-                todayIncome+=todayResultSet.getInt("amount");
+            PreparedStatement todayPreparedStatement = connection.prepareStatement(today);
+            PreparedStatement totalPreparedStatement = connection.prepareStatement(total);
+            ResultSet todayResultSet = todayPreparedStatement.executeQuery();
+            ResultSet totalResultSet = totalPreparedStatement.executeQuery();
+            while (todayResultSet.next()) {
+                todayIncome += todayResultSet.getInt("amount");
             }
-            while (totalResultSet.next()){
-                totalIncome+=totalResultSet.getInt("amount");
+            while (totalResultSet.next()) {
+                totalIncome += totalResultSet.getInt("amount");
             }
-            todayIncomeLabel.setText(todayIncome+" VND");
-            totalIncomeLabel.setText(totalIncome+" VND");
-        }catch (Exception e){
+            todayIncomeLabel.setText(todayIncome + " VND");
+            totalIncomeLabel.setText(totalIncome + " VND");
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     public void setAddProduct() {
-        DataBaseConnection dataBaseConnection=new DataBaseConnection();
-        Connection connection=dataBaseConnection.getConnection();
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        System.out.println(urlImage+"dau add");
+        String x=chooseImageAndSave();
         try {
-            if (IDADDText.getText().isEmpty() || nameADDText.getText().isEmpty() || manufacturerText.getText().isEmpty() || priceADDText.getText().isEmpty() || statusCBox.getSelectionModel().isEmpty()) {
-                alertADDPro.setText("Please try again!");
+            if (IDADDText.getText().isEmpty() || nameADDText.getText().isEmpty() || manufacturerText.getText().isEmpty() || priceADDText.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Empty Fields", "Please fill in all fields and try again!");
             } else {
                 String checkQuery = "SELECT COUNT(1) FROM appmuaban.product WHERE ID = ? OR NAME = ?";
                 try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
                     checkStatement.setString(1, IDADDText.getText());
                     checkStatement.setString(2, nameADDText.getText());
                     ResultSet resultSet = checkStatement.executeQuery();
+                    System.out.println(urlImage+"truoc khi nhap");
+
 
                     if (resultSet.next() && resultSet.getInt(1) > 0) {
-                        alertADDPro.setText("Product already exists. Please try again!");
+                        showAlert(Alert.AlertType.ERROR, "Error", "Product Exists", "Product already exists. Please try again!");
                     } else {
-                        String addQuery = "INSERT INTO appmuaban.product(ID, NAME, MANUFACTURER, STATUS, PRICE) VALUES (?, ?, ?, ?, ?)";
+                        String addQuery = "INSERT INTO appmuaban.product(ID, NAME, MANUFACTURER, IMAGE, PRICE) VALUES (?, ?, ?, ?, ?)";
                         try (PreparedStatement addStatement = connection.prepareStatement(addQuery)) {
                             addStatement.setString(1, IDADDText.getText());
                             addStatement.setString(2, nameADDText.getText());
                             addStatement.setString(3, manufacturerText.getText());
-                            addStatement.setString(4, (String) statusCBox.getValue());
+                            addStatement.setString(4, x);
                             addStatement.setString(5, priceADDText.getText());
-
+                            System.out.println(urlImage+"sau khi nhap");
+                            urlImage = null;
+                            System.out.println(urlImage+"sau khi xoa");
+                            addImageView.setImage(null);
                             int affectedRows = addStatement.executeUpdate();
 
                             if (affectedRows > 0) {
                                 setProductTable();
-                                alertADDPro.setText("ADD product successfully!");
+                                showAlert(Alert.AlertType.INFORMATION, "Success", "Product Added", "Product added successfully!");
+                                urlImage = null;
                             } else {
-                                alertADDPro.setText("Failed to add product. Please try again!");
+                                showAlert(Alert.AlertType.ERROR, "Error", "Failed to Add Product", "Failed to add product. Please try again!");
                             }
                         }
                     }
@@ -459,6 +620,15 @@ public class HomeAdminController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    private void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+
     public void setDeletePro() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -477,36 +647,36 @@ public class HomeAdminController implements Initializable {
                 preparedStatement.setString(2, nameDELETEText.getText());
                 preparedStatement.executeUpdate();
                 setProductTable();
-                alertDELETEPro.setText("Deleted successfully!");
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Product Deleted", "Deleted successfully!");
             } else {
-                alertDELETEPro.setText("Please try again!");
+                showAlert(Alert.AlertType.ERROR, "Error", "Delete Failed", "Product not found. Please try again!");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public void nameOrID(){
+
+    public void nameOrID() {
         nameDELETEText.textProperty().addListener((observableValue, s, t1) -> {
             IDDELETEText.setDisable(!t1.trim().isEmpty());
             confirmDELETEBut.setDisable(t1.trim().isEmpty());
-            if(t1.trim().isEmpty())
+            if (t1.trim().isEmpty())
                 alertDELETEPro.setText("");
         });
         IDDELETEText.textProperty().addListener((observableValue, s, t1) -> {
             nameDELETEText.setDisable(!t1.trim().isEmpty());
             confirmDELETEBut.setDisable(t1.trim().isEmpty());
-            if(t1.trim().isEmpty())
+            if (t1.trim().isEmpty())
                 alertDELETEPro.setText("");
         });
-            confirmDELETEBut.setDisable(true);
+        confirmDELETEBut.setDisable(true);
     }
-    public void clearProductPane(){
+
+    public void clearProductPane() {
         nameADDText.setText("");
         IDADDText.setText("");
         manufacturerText.setText("");
-        priceADDText.setText("");
-        statusCBox.getSelectionModel().clearSelection();
-        statusCBox.setPromptText("Status");
+        priceADDText.setText("");;
         alertDELETEPro.setText("");
 
         IDDELETEText.setText("");
@@ -517,41 +687,529 @@ public class HomeAdminController implements Initializable {
         IDChangeText.setText("");
         changeManufacturerText.setText("");
         priceChangeText.setText("");
-        changeStatusCBox.getSelectionModel().clearSelection();
         alertChangePro.setText("");
     }
-    public void getValueProduct(){
-        ProductData selected=productTable.getSelectionModel().getSelectedItem();
-        if(selected!=null){
-        IDChangeText.setText(String.valueOf(selected.getID()));
-        nameChangeText.setText(selected.getName());
-        changeManufacturerText.setText(selected.getManufacturer());
-        priceChangeText.setText(String.valueOf(selected.getPrice()));
-        changeStatusCBox.setValue(selected.getStatus());
-        }else {
+
+    public void getValueProduct() {
+        ProductData selected = productTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            IDChangeText.setText(String.valueOf(selected.getID()));
+            nameChangeText.setText(selected.getName());
+            changeManufacturerText.setText(selected.getManufacturer());
+            priceChangeText.setText(String.valueOf(selected.getPrice()));
+
+            String imageUrl = selected.getImage();
+            if (!imageUrl.startsWith("file:")) {
+                imageUrl = "file:" + imageUrl;
+            }
+
+            changeImageView.setImage(new Image(imageUrl));
+        } else {
             alertChangePro.setText("Please choose again!");
         }
     }
-    public void setChangePro(){
-        DataBaseConnection dataBaseConnection=new DataBaseConnection();
-        Connection connection=dataBaseConnection.getConnection();
-        String change="UPDATE appmuaban.product SET NAME=?,MANUFACTURER=?,STATUS=?,PRICE=? WHERE ID=?";
+    public void setChangePro() {
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        String x=chooseImageAndSave();
+
+        Connection connection = dataBaseConnection.getConnection();
+        String change = "UPDATE appmuaban.product SET NAME=?, MANUFACTURER=?, IMAGE=?, PRICE=? WHERE ID=?";
         try {
-            if(nameChangeText.getText().isEmpty()||IDChangeText.getText().isEmpty()||changeManufacturerText.getText().isEmpty()||changeStatusCBox.getSelectionModel().isEmpty()){
-                alertChangePro.setText("Please try again!");
-            }else{
-                PreparedStatement preparedStatement= connection.prepareStatement(change);
-                preparedStatement.setString(1,nameChangeText.getText());
-                preparedStatement.setString(2,changeManufacturerText.getText());
-                preparedStatement.setString(3,(String) changeStatusCBox.getValue());
-                preparedStatement.setString(4,(String) priceChangeText.getText());
-                preparedStatement.setString(5,IDChangeText.getText());
+
+            if (nameChangeText.getText().isEmpty() || IDChangeText.getText().isEmpty() || changeManufacturerText.getText().isEmpty() || priceChangeText.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Change Failed", "Please fill in all fields!");
+            } else {
+                PreparedStatement preparedStatement = connection.prepareStatement(change);
+                preparedStatement.setString(1, nameChangeText.getText());
+                preparedStatement.setString(2, changeManufacturerText.getText());
+                preparedStatement.setString(3, x);
+                preparedStatement.setString(4, priceChangeText.getText());
+                preparedStatement.setString(5, IDChangeText.getText());
                 preparedStatement.executeUpdate();
                 setProductTable();
+                urlImage = null;
+                changeImageView.setImage(null);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Change Success", "Product information updated successfully!");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Change Failed", "An error occurred while updating product information. Please try again!");
             throw new RuntimeException(e);
         }
     }
 
+
+    public ObservableList<ProductData> menuGetData() {
+        String sql = "SELECT * FROM appmuaban.product";
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        ObservableList<ProductData> listData = FXCollections.observableArrayList();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ProductData productData;
+            while (resultSet.next()) {
+                productData = new ProductData(resultSet.getInt("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("MANUFACTURER"),
+                        resultSet.getInt("PRICE"),
+                        resultSet.getString("IMAGE"));
+                listData.add(productData);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listData;
+    }
+
+    public void menuDisplayCard() {
+        cardListData.clear();
+        cardListData.addAll(menuGetData());
+
+        int col = 0;
+        int row = 0;
+
+        menuGridPane.getColumnConstraints().clear();
+        menuGridPane.getRowConstraints().clear();
+        for (int i = 0; i < cardListData.size(); i++) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/CardProduct.fxml"));
+                AnchorPane pane = loader.load();
+                CardProductController controller = loader.getController();
+                controller.setData(cardListData.get(i));
+                if (col == 3) {
+                    col = 0;
+                    row += 1;
+                }
+                menuGridPane.add(pane, col++, row);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void filterProductList(String keyword) {
+        ObservableList<ProductData> filteredList = FXCollections.observableArrayList();
+
+        for (ProductData product : cardListData) {
+            if (product.getName().toLowerCase().contains(keyword.toLowerCase()) ||
+                    String.valueOf(product.getID()).contains(keyword)) {
+                filteredList.add(product);
+            }
+        }
+
+        menuGridPane.getChildren().clear();
+        int col = 0;
+        int row = 0;
+        for (ProductData product : filteredList) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/CardProduct.fxml"));
+                AnchorPane pane = loader.load();
+                CardProductController controller = loader.getController();
+                controller.setData(product);
+
+                menuGridPane.add(pane, col++, row);
+                if (col == 3) {
+                    col = 0;
+                    row++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public ObservableList<ProductData> productViewListData() {
+        DataBaseConnection connectNow = new DataBaseConnection();
+        Connection connectDatabase = connectNow.getConnection();
+        ObservableList<ProductData> productList = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM appmuaban.billproduct";
+        try {
+            ProductData productData;
+
+            PreparedStatement preparedStatement = connectDatabase.prepareStatement(sql);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                productData = new ProductData(result.getInt("ID"), result.getString("NAME"), result.getString("MANUFACTURER"), result.getInt("QUANTITY"), result.getInt("PRICE"));
+                productList.add(productData);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return productList;
+    }
+
+    public void showViewProductList() {
+        ObservableList<ProductData> show = productViewListData();
+        if (nameCartCol == null || qCol == null || pCol == null || cartTable == null) {
+            System.err.println("One of the TableColumn or TableView instances is null.");
+            return;
+        }
+        nameCartCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        qCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        pCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        cartTable.setItems(show);
+        cartTable.refresh();
+    }
+
+    public void refreshTableView() {
+        Platform.runLater(() -> {
+            cartTable.refresh();
+        });
+    }
+
+    public int getTotalPrice() {
+        DataBaseConnection connectNow = new DataBaseConnection();
+        Connection connectDatabase = connectNow.getConnection();
+        int totalPrice = 0;
+
+        String query = "SELECT SUM(PRICE) AS TotalPrice FROM appmuaban.billproduct";
+
+        try {
+            Statement statement = connectDatabase.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            if (resultSet.next()) {
+                totalPrice = resultSet.getInt("TotalPrice");
+            }
+
+            resultSet.close();
+            statement.close();
+            connectDatabase.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalPrice;
+    }
+
+    public void clearBillProductData() {
+        DataBaseConnection connectNow = new DataBaseConnection();
+        Connection connectDatabase = connectNow.getConnection();
+
+        String deleteQuery = "DELETE FROM appmuaban.billproduct";
+
+        try {
+            Statement statement = connectDatabase.createStatement();
+            statement.executeUpdate(deleteQuery);
+
+            statement.close();
+            connectDatabase.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getRandom() {
+        Random random = new Random();
+        int number;
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        String check = "SELECT COUNT(1) FROM appmuaban.payments WHERE payment_id=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(check);
+            ResultSet resultSet;
+            do {
+                number = random.nextInt(900) + 100;
+                preparedStatement.setInt(1, number);
+                resultSet = preparedStatement.executeQuery();
+                resultSet.next();
+            } while (resultSet.getInt(1) > 0);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return number;
+    }
+
+    public void setCheckPay() {
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        int random=getRandom();
+
+        String checkBillProduct = "SELECT COUNT(*) AS total FROM appmuaban.billproduct";
+        try {
+            PreparedStatement checkStmt = connection.prepareStatement(checkBillProduct);
+            ResultSet resultSet = checkStmt.executeQuery();
+            resultSet.next();
+            int total = resultSet.getInt("total");
+            resultSet.close();
+            checkStmt.close();
+
+            if (total == 0) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText("No Products");
+                alert.setContentText("Please add products to the bill before making a payment.");
+                alert.show();
+                return;
+            }
+            if(total>0){
+                Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmationAlert.setTitle("Confirmation");
+                confirmationAlert.setHeaderText("Do you want to print the invoice?");
+                confirmationAlert.setContentText("Choose your option.");
+
+                ButtonType buttonTypeYes = new ButtonType("Yes");
+                ButtonType buttonTypeNo = new ButtonType("No and continue");
+                ButtonType buttonTypeExit = new ButtonType("Exit");
+
+                confirmationAlert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+                confirmationAlert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo, buttonTypeExit);
+
+                confirmationAlert.showAndWait().ifPresent(response -> {
+                    if (response == buttonTypeYes) {
+                        handlePrintAction(random);
+                        setPay(random);
+                    } else if (response == buttonTypeNo) {
+                        setPay(random);
+                    } else if (response == buttonTypeExit) {
+                        confirmationAlert.close();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        clearBillProductData();
+    }
+    public void setPay(int random){
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        LocalDateTime date = LocalDateTime.now();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText("Payment success!");
+        alert.setContentText("Please OK to continue!");
+        alert.show();
+        String pay = "INSERT INTO appmuaban.payments VALUE(?,?,?,?)";
+        String user = "Anonymous";
+        if (!customerField.getText().isEmpty()) {
+            user = customerField.getText();
+        }
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(pay);
+            preparedStatement.setString(1, Integer.toString(getRandom()));
+            preparedStatement.setString(2, user);
+            preparedStatement.setString(3, Integer.toString(getTotalPrice()));
+            preparedStatement.setString(4, String.valueOf(date));
+            preparedStatement.executeUpdate();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void handlePrintAction(int random ) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            GeneratePDF generatePDF = new GeneratePDF();
+            try {
+                generatePDF.createPDF(file.getAbsolutePath(),random);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+    public void chooseChangeImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Image File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.bmp", "*.jpeg")
+        );
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            Image image = new Image(selectedFile.toURI().toString());
+                changeImageView.setImage(image);
+                 urlImage=selectedFile.toURI().toString();
+            }
+
+        }
+    public void chooseAddImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Image File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.bmp", "*.jpeg")
+        );
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            String imageUrl = selectedFile.toURI().toString();
+            if (!imageUrl.startsWith("file:")) {
+                imageUrl = "file:" + imageUrl;
+            }
+            Image image = new Image(imageUrl);
+            addImageView.setImage(image);
+            urlImage=imageUrl;
+            System.out.println(imageUrl);
+        }
+    }
+    public String chooseImageAndSave() {
+        if (urlImage != null && !urlImage.isEmpty()) {
+            try {
+                if (!urlImage.startsWith("file:")) {
+                    throw new IllegalArgumentException("Invalid file path format");
+                }
+
+                String fileName = new File(URI.create(urlImage)).getName();
+                Path sourcePath = Paths.get(new URI(urlImage));
+                Path destPath = Paths.get(destDirectoryPath, fileName);
+
+                if (Files.exists(destPath)) {
+                    System.out.println("Image already exists at: " + destPath.toUri().toString());
+                    return destPath.toUri().toString();
+                }
+
+                Files.copy(sourcePath, destPath);
+                String copiedImageUrl = destPath.toUri().toString();
+                System.out.println("Image saved successfully at: " + copiedImageUrl);
+                return copiedImageUrl;
+            } catch (Exception e) {
+                System.out.println("Error saving image: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No image selected.");
+        }
+        return null;
+    }
+    public ObservableList<CustomerData> customerListData() {
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        ObservableList<CustomerData> customerList = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM appmuaban.loginuser";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String username = resultSet.getString("USERNAME");
+                String phoneNumber = resultSet.getString("PNUMBER");
+                int totalSpent = getTotalSpentByCustomer(username);
+                CustomerData customerData = new CustomerData(username, phoneNumber, totalSpent);
+                customerList.add(customerData);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return customerList;
+    }
+
+    public void setCustomerTable() {
+        ObservableList<CustomerData> showCustomer = customerListData();
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        totalSpentCol.setCellValueFactory(new PropertyValueFactory<>("totalSpent"));
+        customerTable.setItems(showCustomer);
+    }
+    public int getTotalSpentByCustomer(String username) {
+        DataBaseConnection connectNow = new DataBaseConnection();
+        Connection connectDatabase = connectNow.getConnection();
+        int totalPrice = 0;
+
+        String query = "SELECT SUM(AMOUNT) AS totalSpent FROM appmuaban.payments WHERE  user_id=?";
+
+        try {
+            PreparedStatement preparedStatement = connectDatabase.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("totalSpent");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+    public void addCustomer() {
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        String name = ADDCusName.getText();
+        String PNum = ADDCusPNum.getText();
+
+        if (name.isEmpty() || PNum.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Empty Fields", "Please fill in both name and phone number fields!");
+            return;
+        }
+
+        String sql = "INSERT INTO appmuaban.loginuser (USERNAME, PNUMBER) VALUES (?, ?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, PNum);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Customer Added", "Customer has been added successfully!");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        setCustomerTable();
+    }
+
+    public void deleteCustomer() {
+        DataBaseConnection dataBaseConnection = new DataBaseConnection();
+        Connection connection = dataBaseConnection.getConnection();
+        String name = CusNameDELETE.getText();
+        String Pnumber = CusPNumDELETE.getText();
+
+        if (name.isEmpty() && Pnumber.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Empty Fields", "Please fill in either name or phone number field!");
+            return; // Kết thúc phương thức nếu cả hai trường đều trống
+        }
+
+        String sql = "";
+        if (!name.isEmpty()) {
+            sql = "DELETE FROM appmuaban.loginuser WHERE USERNAME = ?";
+        } else {
+            sql = "DELETE FROM appmuaban.loginuser WHERE PNUMBER = ?";
+        }
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name.isEmpty() ? Pnumber : name);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Customer Deleted", "Customer has been deleted successfully!");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void nameOrIDCus() {
+        CusNameDELETE.textProperty().addListener((observableValue, s, t1) -> {
+            CusPNumDELETE.setDisable(!t1.trim().isEmpty());
+            confirmDELETECus.setDisable(t1.trim().isEmpty());
+            if (t1.trim().isEmpty()) {
+                alertDELETEPro.setText("");
+            }
+        });
+
+        CusPNumDELETE.textProperty().addListener((observableValue, s, t1) -> {
+            CusNameDELETE.setDisable(!t1.trim().isEmpty());
+            confirmDELETECus.setDisable(t1.trim().isEmpty());
+            if (t1.trim().isEmpty()) {
+                alertDELETEPro.setText("");
+            }
+        });
+        confirmDELETECus.setDisable(true);
+    }
 }
+
+
+
+
+
+

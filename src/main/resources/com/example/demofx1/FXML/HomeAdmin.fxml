@@ -5,9 +5,8 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -16,9 +15,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
@@ -45,7 +44,7 @@
                               <FontIcon iconLiteral="fa-shirtsinbulk" />
                            </graphic>
                         </Button>
-                        <Button fx:id="signOutButton" layoutX="10.0" layoutY="542.0" mnemonicParsing="false" onAction="#signOutAcc" prefHeight="43.0" prefWidth="26.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;">
+                        <Button fx:id="signOutButton" layoutX="10.0" layoutY="542.0" mnemonicParsing="false" onAction="#signOutAcc" prefHeight="43.0" prefWidth="26.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" visible="false">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -53,14 +52,14 @@
                               <FontIcon iconLiteral="fa-sign-out" />
                            </graphic>
                         </Button>
-                        <Label layoutX="68.0" layoutY="550.0" prefHeight="18.0" prefWidth="71.0" text="Sign Out">
+                        <Label layoutX="68.0" layoutY="550.0" prefHeight="18.0" prefWidth="71.0" text="Sign Out" visible="false">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
                         <ImageView fx:id="imageView" fitHeight="146.0" fitWidth="144.0" layoutX="46.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="file:C:\Users\Admin\IdeaProjects\BAMBOO\src\main\resources\com\example\demofx1\Images\bamboo.png" />
+                              <Image url="file:\C:/Users/Admin/IdeaProjects/BAMBOO/src/main/resources/com/example/demofx1/Images/bamboo.png" />
                            </image>
                         </ImageView>
                         <Button fx:id="products" layoutX="13.0" layoutY="366.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Products">
@@ -71,7 +70,7 @@
                               <FontIcon iconLiteral="fa-product-hunt" />
                            </graphic>
                         </Button>
-                        <Button layoutX="14.0" layoutY="419.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Customer">
+                        <Button fx:id="customerBut" layoutX="14.0" layoutY="419.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="43.0" prefWidth="202.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" text="Customer">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -102,7 +101,7 @@
                      <children>
                         <AnchorPane prefHeight="600.0" prefWidth="886.4" style="-fx-background-color: #b3ffb3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Label fx:id="nameAdminHome" alignment="CENTER" layoutX="685.0" layoutY="9.0" prefHeight="35.0" prefWidth="186.0" style="-fx-border-style: solid inside; -fx-border-radius: 4; -fx-background-color: #ffffff;" text="Name">
+                              <Label fx:id="nameAdminHome" alignment="CENTER" layoutX="685.0" layoutY="9.0" prefHeight="35.0" prefWidth="186.0" style="-fx-border-style: solid inside; -fx-border-radius: 4; -fx-background-color: #ffffff;" text="ADMIN">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
@@ -186,7 +185,7 @@
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="productsPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                              <AnchorPane fx:id="productsPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                                  <children>
                                     <AnchorPane layoutX="1.6" layoutY="1.6" prefHeight="181.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                                        <children>
@@ -206,13 +205,18 @@
                                                 <TextField fx:id="manufacturerText" layoutX="248.0" layoutY="28.0" promptText="Manufacturer" />
                                                 <TextField fx:id="nameADDText" layoutX="52.0" layoutY="86.0" promptText="Name_Product" />
                                                 <TextField fx:id="priceADDText" layoutX="248.0" layoutY="86.0" promptText="Price" />
-                                                <ComboBox fx:id="statusCBox" layoutX="417.0" layoutY="28.0" prefWidth="150.0" promptText="Status" />
-                                                <Button fx:id="confirmADDBut" layoutX="449.0" layoutY="79.0" mnemonicParsing="false" onAction="#setAddProduct" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm">
+                                                <Button fx:id="confirmADDBut" layoutX="489.0" layoutY="111.0" mnemonicParsing="false" onAction="#setAddProduct" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
                                                 </Button>
                                                 <Label fx:id="alertADDPro" layoutX="408.0" layoutY="131.0" prefHeight="18.0" prefWidth="161.0" textFill="RED" />
+                                                <Button fx:id="chooseImg" layoutX="398.0" layoutY="118.0" mnemonicParsing="false" onAction="#chooseAddImage" text="ADD Image" />
+                                                <AnchorPane layoutX="411.0" layoutY="14.0" style="-fx-border-color: #000000; -fx-border-radius: 1;">
+                                                   <children>
+                                                      <ImageView fx:id="addImageView" fitHeight="90.0" fitWidth="165.0" pickOnBounds="true" preserveRatio="true" />
+                                                   </children>
+                                                </AnchorPane>
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane fx:id="deleteProPane" layoutX="-137.0" layoutY="45.0" prefHeight="164.0" prefWidth="590.0" style="-fx-border-radius: 4; -fx-background-color: #f0f0f0; -fx-background-radius: 4; -fx-border-color: #b4b4b4; -fx-border-style: dashed;" visible="false" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="9.0">
@@ -238,13 +242,18 @@
                                                 <TextField fx:id="changeManufacturerText" layoutX="248.0" layoutY="28.0" promptText="Manufacturer" />
                                                 <TextField fx:id="nameChangeText" layoutX="52.0" layoutY="86.0" promptText="Name_Product" />
                                                 <TextField fx:id="priceChangeText" layoutX="248.0" layoutY="86.0" promptText="Price" />
-                                                <ComboBox fx:id="changeStatusCBox" layoutX="417.0" layoutY="28.0" prefWidth="150.0" promptText="Status" />
-                                                <Button fx:id="confirmChangeBut" layoutX="449.0" layoutY="79.0" mnemonicParsing="false" onAction="#setChangePro" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm">
+                                                <Button fx:id="confirmChangeBut" layoutX="498.0" layoutY="111.0" mnemonicParsing="false" onAction="#setChangePro" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
                                                 </Button>
                                                 <Label fx:id="alertChangePro" layoutX="408.0" layoutY="131.0" prefHeight="18.0" prefWidth="161.0" textFill="RED" />
+                                                <Button fx:id="chooseImg1" layoutX="408.0" layoutY="110.0" mnemonicParsing="false" onAction="#chooseChangeImage" prefHeight="42.0" prefWidth="87.0" text="Change Img" />
+                                                <AnchorPane layoutX="414.0" layoutY="14.0" style="-fx-border-color: #000000; -fx-border-radius: 1;">
+                                                   <children>
+                                                      <ImageView fx:id="changeImageView" fitHeight="90.0" fitWidth="165.0" pickOnBounds="true" preserveRatio="true" />
+                                                   </children>
+                                                </AnchorPane>
                                              </children>
                                           </AnchorPane>
                                           <Button fx:id="changeProBut" layoutX="147.0" layoutY="63.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #def471;" text="Change">
@@ -258,61 +267,50 @@
                                        <children>
                                           <TableView fx:id="productTable" layoutX="190.0" layoutY="34.0" onMouseClicked="#getValueProduct" prefHeight="318.40000000000015" prefWidth="831.9999999999999" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columns>
-                                              <TableColumn fx:id="idProductCol" prefWidth="119.99994450807571" text="ID_Product" />
-                                              <TableColumn fx:id="nameProductCol" prefWidth="187.199951171875" text="Name_Product" />
-                                                <TableColumn fx:id="manufacturerCol" prefWidth="214.39999389648438" text="Manufacturer" />
-                                                <TableColumn fx:id="priceCol" prefWidth="134.39996337890625" text="Price" />
-                                                <TableColumn fx:id="statusCol" prefWidth="175.20004882812498" text="Status" />
+                                              <TableColumn fx:id="idProductCol" maxWidth="119.99994450807571" minWidth="119.99994450807571" prefWidth="119.99994450807571" text="ID_Product" />
+                                              <TableColumn fx:id="nameProductCol" maxWidth="187.199951171875" minWidth="187.199951171875" prefWidth="187.199951171875" text="Name_Product" />
+                                                <TableColumn fx:id="manufacturerCol" maxWidth="214.39999389648438" minWidth="214.39999389648438" prefWidth="214.39999389648438" text="Manufacturer" />
+                                                <TableColumn fx:id="priceCol" maxWidth="134.39996337890625" minWidth="134.39996337890625" prefWidth="134.39996337890625" text="Price" />
+                                                <TableColumn fx:id="imageCol" maxWidth="175.20004882812498" minWidth="175.20004882812498" prefWidth="175.20004882812498" text="Image" />
                                             </columns>
                                           </TableView>
                                        </children>
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="POSPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0">
+                              <AnchorPane fx:id="POSPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" visible="false" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0">
                                  <children>
-                                    <AnchorPane prefHeight="523.0" prefWidth="250.0" style="-fx-border-color: #b4b4b4; -fx-border-style: dashed; -fx-border-radius: 4;" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+                                    <AnchorPane prefHeight="523.0" prefWidth="250.0" style="-fx-border-color: #b4b4b4; -fx-border-style: dashed; -fx-border-radius: 4;" AnchorPane.leftAnchor="604.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
-                                          <Label layoutX="22.0" layoutY="118.0" text="Product Name:" />
-                                          <TextField layoutX="103.0" layoutY="114.0" />
-                                          <Label layoutX="44.0" layoutY="156.0" text="Product ID:" />
-                                          <TextField layoutX="103.0" layoutY="152.0" />
-                                          <Spinner layoutX="102.0" layoutY="182.0" prefHeight="26.0" prefWidth="81.0" />
-                                          <Label layoutX="50.0" layoutY="187.0" text="Quantity:" />
-                                          <Button layoutX="153.0" layoutY="274.0" mnemonicParsing="false" style="-fx-background-color: #3cb371;" text="ADD">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Button>
-                                          <Button layoutX="163.0" layoutY="364.0" mnemonicParsing="false" prefWidth="74.0" style="-fx-background-color: #ffa500;" text="PAY">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Button>
-                                          <Label layoutX="38.0" layoutY="323.0" text="Total:">
+                                          <Label layoutX="14.0" layoutY="359.0" text="Total:">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="85.0" layoutY="323.0" prefHeight="30.0" prefWidth="114.0" text="VND">
+                                          <Button layoutX="80.0" layoutY="399.0" mnemonicParsing="false" onAction="#clearBillProductData" prefHeight="44.0" prefWidth="136.0" style="-fx-background-color: #ff6347;" text="AC" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Button>
+                                          <Label fx:id="totalLabel" layoutX="67.0" layoutY="359.0" prefHeight="30.0" prefWidth="170.0" text="VND">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
                                           </Label>
-                                          <Button layoutX="42.0" layoutY="274.0" mnemonicParsing="false" style="-fx-background-color: #ff6347;" text="RESET">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Button>
-                                          <Label fx:id="alertLabel" layoutX="75.0" layoutY="242.0" prefHeight="18.0" prefWidth="136.0" textFill="RED" />
-                                          <Label layoutX="52.0" layoutY="215.0" text="Price/1:" />
-                                          <TextField disable="true" layoutX="103.0" layoutY="211.0" promptText="0" />
-                                          <Button fx:id="viewCartBut" layoutX="21.0" layoutY="364.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: #00ffff;" text="VIEW CART" AnchorPane.bottomAnchor="117.59999999999997" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="364.0">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Button>
-                                          <Button layoutX="21.0" layoutY="421.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: #00ffff;" text="SHOW ALL" AnchorPane.bottomAnchor="118.39999999999989">
+                                          <TextField fx:id="searchField" layoutX="9.0" layoutY="14.0" prefHeight="34.0" prefWidth="231.0" promptText="Search (NAME or ID)" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                          <AnchorPane layoutX="7.2" layoutY="52.0" prefHeight="262.0" prefWidth="244.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="51.0">
+                                             <children>
+                                                <TableView fx:id="cartTable" layoutX="20.0" layoutY="4.0" prefHeight="242.0" prefWidth="244.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="nameCartCol" maxWidth="116.79998797178268" minWidth="116.79998797178268" prefWidth="116.79998797178268" text="PNAME" />
+                                                    <TableColumn fx:id="qCol" maxWidth="44.0" minWidth="44.0" prefWidth="44.0" text="Q" />
+                                                      <TableColumn fx:id="pCol" maxWidth="83.99993896484375" minWidth="83.99993896484375" prefWidth="83.99993896484375" text="PRICE" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </AnchorPane>
+                                          <TextField fx:id="customerField" layoutX="7.2" layoutY="324.0" prefHeight="32.0" prefWidth="244.0" promptText="CUSTOMER" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" />
+                                          <Button layoutX="80.0" layoutY="457.0" mnemonicParsing="false" onAction="#setCheckPay" prefHeight="44.0" prefWidth="96.0" style="-fx-background-color: #0099FF;" text="PAY" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -321,114 +319,77 @@
                                     </AnchorPane>
                                     <AnchorPane layoutX="7.2" layoutY="14.0" prefHeight="533.0" prefWidth="587.0" style="-fx-border-color: #b4b4b4; -fx-border-style: dashed; -fx-border-radius: 4;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="273.0" AnchorPane.topAnchor="5.0">
                                        <children>
-                                          <AnchorPane layoutX="205.0" layoutY="14.0" prefHeight="175.0" prefWidth="175.0" style="-fx-background-color: #ffffff;" AnchorPane.topAnchor="5.0">
+                                          <ScrollPane prefHeight="531.2000000000002" prefWidth="586.4000000000001" style="-fx-background-color: #b3ffb3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <content>
+                                                <GridPane fx:id="menuGridPane" alignment="TOP_CENTER" hgap="19.0" prefHeight="25.0" prefWidth="128.0" vgap="15.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                   <padding>
+                                                      <Insets left="5.0" right="5.0" top="5.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="CustomerPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                                 <children>
+                                    <AnchorPane layoutX="1.6" layoutY="1.6" prefHeight="181.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                                       <children>
+                                          <AnchorPane fx:id="deleteCusPane" layoutX="-137.0" layoutY="45.0" prefHeight="164.0" prefWidth="590.0" style="-fx-border-radius: 4; -fx-background-color: #f0f0f0; -fx-background-radius: 4; -fx-border-color: #b4b4b4; -fx-border-style: dashed;" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="11.0">
                                              <children>
-                                                <VBox layoutY="-50.0" prefHeight="175.0" prefWidth="190.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <HBox prefHeight="25.0" prefWidth="175.0">
-                                                         <children>
-                                                            <Label prefHeight="31.0" prefWidth="109.0" text="TÊN SẢN PHẨM">
-                                                               <HBox.margin>
-                                                                  <Insets left="5.0" top="5.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                            <Label prefHeight="25.0" prefWidth="56.0" text="GIÁ">
-                                                               <HBox.margin>
-                                                                  <Insets left="5.0" right="5.0" top="5.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <AnchorPane prefHeight="111.0" prefWidth="175.0">
-                                                         <children>
-                                                            <ImageView fitHeight="111.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
-                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                                         <children>
-                                                            <Spinner prefHeight="26.0" prefWidth="73.0" />
-                                                            <Button mnemonicParsing="false" text="ADD" />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
+                                                <TextField fx:id="CusNameDELETE" layoutX="22.0" layoutY="35.0" prefHeight="50.0" prefWidth="209.0" promptText="NAME" />
+                                                <TextField fx:id="CusPNumDELETE" layoutX="303.0" layoutY="35.0" prefHeight="50.0" prefWidth="209.0" promptText="PHONE NUMBER" />
+                                                <Button fx:id="confirmDELETECus" layoutX="448.0" layoutY="91.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="90.0">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Button>
+                                                <Label fx:id="alertDELETEPro1" layoutX="408.0" layoutY="131.0" prefHeight="18.0" prefWidth="161.0" textFill="RED" />
+                                                <Label layoutX="262.0" layoutY="35.0" prefHeight="49.0" prefWidth="12.0" text="||">
+                                                   <font>
+                                                      <Font size="32.0" />
+                                                   </font>
+                                                </Label>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane layoutX="427.0" layoutY="-3.0" prefHeight="175.0" prefWidth="175.0" style="-fx-background-color: #000000;" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                          <AnchorPane fx:id="ADDCusPane" layoutX="14.0" layoutY="12.0" minWidth="590.0" prefHeight="159.0" prefWidth="361.0" style="-fx-border-radius: 4; -fx-background-color: #f0f0f0; -fx-background-radius: 4; -fx-border-color: #b4b4b4; -fx-border-style: dashed;" visible="false" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="11.0">
                                              <children>
-                                                <VBox layoutY="-50.0" prefHeight="175.0" prefWidth="190.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <HBox prefHeight="25.0" prefWidth="175.0">
-                                                         <children>
-                                                            <Label prefHeight="31.0" prefWidth="109.0" text="TÊN SẢN PHẨM">
-                                                               <HBox.margin>
-                                                                  <Insets left="5.0" top="5.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                            <Label prefHeight="25.0" prefWidth="56.0" text="GIÁ">
-                                                               <HBox.margin>
-                                                                  <Insets left="5.0" right="5.0" top="5.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <AnchorPane prefHeight="111.0" prefWidth="175.0">
-                                                         <children>
-                                                            <ImageView fitHeight="111.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
-                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                                         <children>
-                                                            <Spinner prefHeight="26.0" prefWidth="73.0" />
-                                                            <Button mnemonicParsing="false" text="ADD" />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
+                                                <TextField fx:id="ADDCusName" layoutX="45.0" layoutY="25.0" prefHeight="50.0" prefWidth="209.0" promptText="NAME" />
+                                                <TextField fx:id="ADDCusPNum" layoutX="325.0" layoutY="23.0" prefHeight="50.0" prefWidth="209.0" promptText="PHONE NUMBER" />
+                                                <Button fx:id="confirmADDCus" layoutX="449.0" layoutY="92.0" mnemonicParsing="false" onAction="#addCustomer" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="90.0">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Button>
+                                                <AnchorPane layoutX="414.0" layoutY="14.0" style="-fx-border-color: #000000; -fx-border-radius: 1;" />
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane prefHeight="175.0" prefWidth="175.0" style="-fx-background-color: #000000;" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
-                                             <children>
-                                                <VBox layoutY="-50.0" prefHeight="175.0" prefWidth="190.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <HBox prefHeight="25.0" prefWidth="175.0">
-                                                         <children>
-                                                            <Label prefHeight="31.0" prefWidth="109.0" text="TÊN SẢN PHẨM">
-                                                               <HBox.margin>
-                                                                  <Insets left="5.0" top="5.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                            <Label prefHeight="25.0" prefWidth="56.0" text="GIÁ">
-                                                               <HBox.margin>
-                                                                  <Insets left="5.0" right="5.0" top="5.0" />
-                                                               </HBox.margin>
-                                                            </Label>
-                                                         </children>
-                                                      </HBox>
-                                                      <AnchorPane prefHeight="111.0" prefWidth="175.0">
-                                                         <children>
-                                                            <ImageView fitHeight="111.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                         </children>
-                                                      </AnchorPane>
-                                                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                                         <children>
-                                                            <Spinner prefHeight="26.0" prefWidth="73.0" />
-                                                            <Button mnemonicParsing="false" text="ADD" />
-                                                         </children>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </HBox>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </AnchorPane>
+                                          <Button fx:id="addCusBut" layoutX="33.0" layoutY="33.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #3cb371;" text="ADD">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="deleteCusBut" layoutX="135.0" layoutY="32.0" mnemonicParsing="false" onAction="#switchPane" prefHeight="39.0" prefWidth="68.0" style="-fx-background-color: #ff6347;" text="DELETE">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane layoutX="12.0" layoutY="196.8" prefHeight="320.0" prefWidth="834.0" style="-fx-background-color: #ffffff; -fx-border-radius: 4; -fx-border-color: #b4b4b4; -fx-background-radius: 4;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="196.0">
+                                       <children>
+                                          <TableView fx:id="customerTable" layoutX="190.0" layoutY="34.0" onMouseClicked="#getValueProduct" prefHeight="318.40000000000015" prefWidth="831.9999999999999" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <columns>
+                                                <TableColumn fx:id="nameCol" maxWidth="275.0" minWidth="275.0" prefWidth="275.0" text="Name" />
+                                                <TableColumn fx:id="phoneCol" maxWidth="275.0" minWidth="275.0" prefWidth="275.0" text="PhoneNumer" />
+                                                <TableColumn fx:id="totalSpentCol" maxWidth="279.200048828125" minWidth="279.200048828125" prefWidth="279.200048828125" text="TotalSpent" />
+                                             </columns>
+                                          </TableView>
                                        </children>
                                     </AnchorPane>
                                  </children>

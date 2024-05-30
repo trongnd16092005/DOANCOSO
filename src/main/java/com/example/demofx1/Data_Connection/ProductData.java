@@ -6,7 +6,7 @@ public class ProductData {
     private String manufacturer;
     private int quantity;
     private int price;
-    private String status;
+    private String image;
 
     public ProductData(int ID, String name, String manufacturer, int quantity, int price) {
         this.ID = ID;
@@ -16,20 +16,20 @@ public class ProductData {
         this.price = price;
     }
 
-    public ProductData(int ID, String name, String manufacturer, int price, String status) {
+    public ProductData(int ID, String name, String manufacturer, int price, String image) {
         this.ID = ID;
         this.name = name;
         this.manufacturer = manufacturer;
         this.price = price;
-        this.status = status;
+        this.image = image;
     }
 
-    public String getStatus() {
-        return status;
+    public String getImage() {
+        return image;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public ProductData() {

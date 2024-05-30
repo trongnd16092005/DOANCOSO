@@ -159,7 +159,7 @@ public class HomeUserController implements Initializable {
             PreparedStatement preparedStatement=connectDatabase.prepareStatement(sql);
             ResultSet resultSet=preparedStatement.executeQuery();
             while (resultSet.next()){
-                productData=new ProductData(resultSet.getInt("ID"),resultSet.getString("NAME"), resultSet.getString("MANUFACTURER"),resultSet.getInt("PRICE"),resultSet.getString("STATUS") );
+                productData=new ProductData(resultSet.getInt("ID"),resultSet.getString("NAME"), resultSet.getString("MANUFACTURER"),resultSet.getInt("PRICE"),resultSet.getString("IMAGE") );
                 productList.add(productData);
             }
         }catch (Exception e){
@@ -173,7 +173,7 @@ public class HomeUserController implements Initializable {
         nameProductCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         manufacturerCol.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("image"));
         productTable.setItems(show);
     }
     public ObservableList<ProductData> SearchProductListData(){
@@ -188,7 +188,7 @@ public class HomeUserController implements Initializable {
             preparedStatement.setString(2,nameText.getText());
             ResultSet resultSet=preparedStatement.executeQuery();
             while (resultSet.next()){
-                productData=new ProductData(resultSet.getInt("ID"),resultSet.getString("NAME"), resultSet.getString("MANUFACTURER"),resultSet.getInt("PRICE"),resultSet.getString("STATUS") );
+                productData=new ProductData(resultSet.getInt("ID"),resultSet.getString("NAME"), resultSet.getString("MANUFACTURER"),resultSet.getInt("PRICE"),resultSet.getString("IMAGE") );
                 productList.add(productData);
             }
         }catch (Exception e){
@@ -202,7 +202,7 @@ public class HomeUserController implements Initializable {
         nameProductCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         manufacturerCol.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("image"));
         productTable.setItems(showSearch);
     }
     public void setSpinner(){

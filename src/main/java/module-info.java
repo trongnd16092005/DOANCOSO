@@ -9,6 +9,10 @@ module com.example.demofx1 {
     requires  org.kordamp.ikonli.fontawesome5;
     requires  org.kordamp.ikonli.ociicons;
     requires java.sql;
+    requires org.apache.pdfbox;
+    requires kernel;
+    requires layout;
+    requires java.desktop;
 
 
     exports com.example.demofx1.Main;
