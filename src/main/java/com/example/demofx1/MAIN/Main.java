@@ -1,4 +1,4 @@
-package com.example.demofx1;
+package com.example.demofx1.MAIN;
 
 import com.example.demofx1.CONTROLLER.HomeAdminController;
 import javafx.application.Application;

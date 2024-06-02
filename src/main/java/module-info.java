@@ -6,14 +6,13 @@ module com.example.demofx1 {
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.fontawesome;
-    requires  org.kordamp.ikonli.fontawesome5;
-    requires  org.kordamp.ikonli.ociicons;
+    requires org.kordamp.ikonli.fontawesome5;
+    requires org.kordamp.ikonli.ociicons;
     requires java.sql;
     requires org.apache.pdfbox;
     requires kernel;
     requires layout;
     requires java.desktop;
-
 
     exports com.example.demofx1.MAIN;
     opens com.example.demofx1.MAIN to javafx.fxml;
