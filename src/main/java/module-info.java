@@ -15,10 +15,10 @@ module com.example.demofx1 {
     requires java.desktop;
 
 
-    exports com.example.demofx1.Main;
-    opens com.example.demofx1.Main to javafx.fxml;
-    exports com.example.demofx1.Controller;
-    opens com.example.demofx1.Controller to javafx.fxml;
-    exports com.example.demofx1.Data_Connection;
-    opens com.example.demofx1.Data_Connection to javafx.fxml;
+    exports com.example.demofx1.MAIN;
+    opens com.example.demofx1.MAIN to javafx.fxml;
+    exports com.example.demofx1.CONTROLLER;
+    opens com.example.demofx1.CONTROLLER to javafx.fxml;
+    exports com.example.demofx1.MODEL;
+    opens com.example.demofx1.MODEL to javafx.fxml;
 }

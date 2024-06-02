@@ -1,7 +1,6 @@
-package com.example.demofx1.Controller;
+package com.example.demofx1.CONTROLLER;
 
-import com.example.demofx1.Data_Connection.*;
-import com.example.demofx1.Main.GeneratePDF;
+import com.example.demofx1.MODEL.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -254,13 +253,13 @@ public class HomeAdminController implements Initializable {
 
         addProPane.setVisible(true);
         deleteProPane.setVisible(false);
-        InputStream inputStream = getClass().getResourceAsStream("/com/example/demofx1/Images/bamboo.png");
+        InputStream inputStream = getClass().getResourceAsStream("/com/example/demofx1/IMAGES/bamboo.png");
     }
 
     public void signOutAcc(ActionEvent event) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/LoginScreen.fxml"));
+        loader.setLocation(getClass().getResource("/com/example/demofx1/VIEW/LoginScreen.fxml"));
         Parent signInView = loader.load();
         Scene scene = new Scene(signInView);
         stage.setY(170);
@@ -773,7 +772,7 @@ public class HomeAdminController implements Initializable {
         for (int i = 0; i < cardListData.size(); i++) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/CardProduct.fxml"));
+                loader.setLocation(getClass().getResource("/com/example/demofx1/VIEW/CardProduct.fxml"));
                 AnchorPane pane = loader.load();
                 CardProductController controller = loader.getController();
                 controller.setData(cardListData.get(i));
@@ -804,7 +803,7 @@ public class HomeAdminController implements Initializable {
         for (ProductData product : filteredList) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/com/example/demofx1/FXML/CardProduct.fxml"));
+                loader.setLocation(getClass().getResource("/com/example/demofx1/VIEW/CardProduct.fxml"));
                 AnchorPane pane = loader.load();
                 CardProductController controller = loader.getController();
                 controller.setData(product);
