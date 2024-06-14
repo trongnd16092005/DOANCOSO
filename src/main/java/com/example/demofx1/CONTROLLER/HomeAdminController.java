@@ -62,15 +62,15 @@ public class HomeAdminController implements Initializable {
     @FXML
     TableView<ProductData> productTable;
     @FXML
-    TableColumn<PaymentData, Integer> idProductCol;
+    TableColumn<ProductData, Integer> idProductCol;
     @FXML
-    TableColumn<PaymentData, String> nameProductCol;
+    TableColumn<ProductData, String> nameProductCol;
     @FXML
-    TableColumn<PaymentData, String> manufacturerCol;
+    TableColumn<ProductData, String> manufacturerCol;
     @FXML
-    TableColumn<PaymentData, Integer> priceCol;
+    TableColumn<ProductData, Integer> priceCol;
     @FXML
-    TableColumn<PaymentData, String> imageCol;//status
+    TableColumn<ProductData, String> imageCol;//status
     @FXML
     Button income;
     @FXML
@@ -412,7 +412,11 @@ public class HomeAdminController implements Initializable {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                ProductData productData = new ProductData(resultSet.getInt("ID"), resultSet.getString("NAME"), resultSet.getString("MANUFACTURER"), resultSet.getInt("PRICE"), resultSet.getString("IMAGE"));
+                ProductData productData = new ProductData(resultSet.getInt("ID"),
+                        resultSet.getString("NAME"),
+                        resultSet.getString("MANUFACTURER"),
+                        resultSet.getInt("PRICE"),
+                        resultSet.getString("IMAGE"));
                 productList.add(productData);
             }
         } catch (Exception e) {
@@ -1229,6 +1233,7 @@ public class HomeAdminController implements Initializable {
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Customer Deleted", "Customer has been deleted successfully!");
+                setCustomerTable();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
