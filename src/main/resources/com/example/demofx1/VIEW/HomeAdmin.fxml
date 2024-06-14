@@ -44,7 +44,7 @@
                               <FontIcon iconLiteral="fa-shirtsinbulk" />
                            </graphic>
                         </Button>
-                        <Button fx:id="signOutButton" layoutX="10.0" layoutY="542.0" mnemonicParsing="false" onAction="#signOutAcc" prefHeight="43.0" prefWidth="26.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" visible="false">
+                        <Button fx:id="signOutButton" layoutX="10.0" layoutY="542.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="26.0" style="-fx-background-radius: 10px; -fx-background-color: #b3ffb3;" visible="false">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>

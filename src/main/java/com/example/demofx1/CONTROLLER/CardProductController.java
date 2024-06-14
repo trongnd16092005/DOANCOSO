@@ -13,8 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
-import javafx.scene.control.*;
-
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,14 +23,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
-
-
 public class CardProductController implements Initializable {
     @FXML
     private AnchorPane cardForm;
 
     @FXML
-    private Label  namePro;;
+    private Label namePro;
 
     @FXML
     private Label pricePro;
@@ -48,8 +46,8 @@ public class CardProductController implements Initializable {
     private int currentValue;
     private HomeAdminController homeController;
 
-
-    public void setData(ProductData productData){
+    // Thiết lập dữ liệu sản phẩm cho thẻ sản phẩm
+    public void setData(ProductData productData) {
         this.productData = productData;
         namePro.setText(productData.getName() + "-" + productData.getID());
         pricePro.setText(productData.getPrice() + " VNĐ");
@@ -61,20 +59,26 @@ public class CardProductController implements Initializable {
         image = new Image(path, 175, 111, false, true);
         proImage.setImage(image);
     }
-    public void setSpinner(){
-        SpinnerValueFactory<Integer> valueFactory=new SpinnerValueFactory.IntegerSpinnerValueFactory(0,10);
+
+    // Thiết lập Spinner cho số lượng sản phẩm
+    public void setSpinner() {
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10);
         valueFactory.setValue(0);
         productSpin.setValueFactory(valueFactory);
         productSpin.valueProperty().addListener(new ChangeListener<Integer>() {
             @Override
             public void changed(ObservableValue<? extends Integer> observableValue, Integer integer, Integer t1) {
-                 currentValue=productSpin.getValue();
+                currentValue = productSpin.getValue();
             }
         });
     }
+
+    // Thiết lập HomeController để cập nhật giao diện
     public void setHomeController(HomeAdminController homeController) {
         this.homeController = homeController;
     }
+
+    // Phương thức thêm sản phẩm vào cơ sở dữ liệu
     public void setAddProduct() throws IOException {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
@@ -122,16 +126,14 @@ public class CardProductController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
-//
-//        if (homeController != null) {
-//            homeController.refreshTableView();
-//        }
-//        homeAdminController.refreshTableView();
+
+        // Đặt lại giá trị của Spinner
         productSpin.getValueFactory().setValue(0);
     }
+
+    // Phương thức khởi tạo khi lớp này được tạo
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setSpinner();
     }
-
 }

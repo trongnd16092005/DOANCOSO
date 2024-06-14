@@ -256,21 +256,7 @@ public class HomeAdminController implements Initializable {
         InputStream inputStream = getClass().getResourceAsStream("/com/example/demofx1/IMAGES/bamboo.png");
     }
 
-    public void signOutAcc(ActionEvent event) throws IOException {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/demofx1/VIEW/LoginScreen.fxml"));
-        Parent signInView = loader.load();
-        Scene scene = new Scene(signInView);
-        stage.setY(170);
-        stage.setX(350);
-        stage.setScene(scene);
-    }
-
-    public void setNameAdminHome(AdminData data) {
-        nameAdminHome.setText(data.getFName());
-    }
-
+    // Thiết lập biểu đồ thu nhập theo tháng
     public void setIncomeChart() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         int month = currentDateTime.getMonthValue();
@@ -285,6 +271,7 @@ public class HomeAdminController implements Initializable {
         lineIncomeChart.getData().add(series);
     }
 
+    // Lấy tổng thu nhập theo tháng
     public String changeMonthToString(int month) {
         if (month == -3)
             return "Sep";
@@ -339,6 +326,7 @@ public class HomeAdminController implements Initializable {
         return totalPerM;
     }
 
+    // Lấy danh sách thanh toán từ cơ sở dữ liệu
     public ObservableList<PaymentData> totalPaymentListData() {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
@@ -361,6 +349,7 @@ public class HomeAdminController implements Initializable {
         return paymentList;
     }
 
+    // Hiển thị danh sách thanh toán tổng quát
     public void showTotalPaymentList() {
         ObservableList<PaymentData> showTotal = totalPaymentListData();
         idPayment.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -373,6 +362,7 @@ public class HomeAdminController implements Initializable {
         todayIncomeTable.setVisible(false);
     }
 
+    // Lấy danh sách thanh toán trong ngày
     public ObservableList<PaymentData> todayPaymentListData() {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
@@ -399,6 +389,7 @@ public class HomeAdminController implements Initializable {
         return paymentList;
     }
 
+    // Hiển thị danh sách thanh toán trong ngày
     public void showTodayPaymentList() {
         ObservableList<PaymentData> showToday = todayPaymentListData();
         todayIDPayment.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -411,6 +402,7 @@ public class HomeAdminController implements Initializable {
         todayIncomeTable.setVisible(true);
     }
 
+    // Lấy danh sách sản phẩm từ cơ sở dữ liệu
     public ObservableList<ProductData> productListData() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -429,6 +421,7 @@ public class HomeAdminController implements Initializable {
         return productList;
     }
 
+    // Thiết lập bảng sản phẩm với dữ liệu từ cơ sở dữ liệu
     public void setProductTable() {
         ObservableList<ProductData> showProduct = productListData();
         idProductCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
@@ -439,6 +432,7 @@ public class HomeAdminController implements Initializable {
         productTable.setItems(showProduct);
     }
 
+    // Xử lý sự kiện chuyển đổi giữa các tab (Thu nhập, Sản phẩm, POS, Khách hàng)
     public void switchPane(ActionEvent event) {
         if (event.getSource() == income) {
             incomePane.setVisible(true);
@@ -535,13 +529,15 @@ public class HomeAdminController implements Initializable {
     }
 
 
-
+    // Hiển thị biểu đồ thu nhập và ẩn các bảng thu nhập
     public void setVisibleIncomeChart() {
         lineIncomeChart.setVisible(true);
         totalIncomeTable.setVisible(false);
         todayIncomeTable.setVisible(false);
     }
 
+
+    // Thiết lập nhãn hiển thị tổng thu nhập và thu nhập hôm nay
     public void setLabelOfIncome() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -571,6 +567,8 @@ public class HomeAdminController implements Initializable {
         }
     }
 
+
+    // Thêm sản phẩm mới vào cơ sở dữ liệu
     public void setAddProduct() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -620,6 +618,8 @@ public class HomeAdminController implements Initializable {
         }
     }
 
+
+    // Hiển thị hộp thoại cảnh báo
     private void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -628,6 +628,8 @@ public class HomeAdminController implements Initializable {
         alert.showAndWait();
     }
 
+
+    // Xóa sản phẩm khỏi cơ sở dữ liệu
     public void setDeletePro() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -655,6 +657,8 @@ public class HomeAdminController implements Initializable {
         }
     }
 
+
+    // Kiểm tra xem trường tên hoặc ID có được điền không và vô hiệu hóa trường còn lại
     public void nameOrID() {
         nameDELETEText.textProperty().addListener((observableValue, s, t1) -> {
             IDDELETEText.setDisable(!t1.trim().isEmpty());
@@ -671,6 +675,8 @@ public class HomeAdminController implements Initializable {
         confirmDELETEBut.setDisable(true);
     }
 
+
+    // Xóa nội dung các trường nhập liệu của sản phẩm
     public void clearProductPane() {
         nameADDText.setText("");
         IDADDText.setText("");
@@ -689,6 +695,8 @@ public class HomeAdminController implements Initializable {
         alertChangePro.setText("");
     }
 
+
+    // Lấy giá trị của sản phẩm được chọn để thay đổi thông tin
     public void getValueProduct() {
         ProductData selected = productTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
@@ -707,6 +715,8 @@ public class HomeAdminController implements Initializable {
             alertChangePro.setText("Please choose again!");
         }
     }
+
+    // Cập nhật thông tin sản phẩm
     public void setChangePro() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         String x=chooseImageAndSave();
@@ -737,6 +747,7 @@ public class HomeAdminController implements Initializable {
     }
 
 
+    // Lấy danh sách sản phẩm từ cơ sở dữ liệu
     public ObservableList<ProductData> menuGetData() {
         String sql = "SELECT * FROM appmuaban.product";
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
@@ -760,6 +771,8 @@ public class HomeAdminController implements Initializable {
         return listData;
     }
 
+
+    // Hiển thị danh sách sản phẩm trong một GridPane
     public void menuDisplayCard() {
         cardListData.clear();
         cardListData.addAll(menuGetData());
@@ -787,6 +800,8 @@ public class HomeAdminController implements Initializable {
         }
     }
 
+
+    // Lọc danh sách sản phẩm theo từ khóa và hiển thị kết quả lọc trong GridPane
     public void filterProductList(String keyword) {
         ObservableList<ProductData> filteredList = FXCollections.observableArrayList();
 
@@ -819,6 +834,8 @@ public class HomeAdminController implements Initializable {
         }
     }
 
+
+    // Lấy danh sách sản phẩm từ cơ sở dữ liệu và trả về dưới dạng ObservableList
     public ObservableList<ProductData> productViewListData() {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
@@ -839,6 +856,8 @@ public class HomeAdminController implements Initializable {
         return productList;
     }
 
+
+    // Hiển thị danh sách sản phẩm trong TableView
     public void showViewProductList() {
         ObservableList<ProductData> show = productViewListData();
         if (nameCartCol == null || qCol == null || pCol == null || cartTable == null) {
@@ -853,12 +872,8 @@ public class HomeAdminController implements Initializable {
         cartTable.refresh();
     }
 
-    public void refreshTableView() {
-        Platform.runLater(() -> {
-            cartTable.refresh();
-        });
-    }
 
+    // Tính tổng giá trị của tất cả sản phẩm trong cơ sở dữ liệu
     public int getTotalPrice() {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
@@ -884,6 +899,8 @@ public class HomeAdminController implements Initializable {
         return totalPrice;
     }
 
+
+    // Xóa dữ liệu sản phẩm trong bảng billproduct
     public void clearBillProductData() {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
@@ -901,6 +918,8 @@ public class HomeAdminController implements Initializable {
         }
     }
 
+
+    // Tạo một số ngẫu nhiên không trùng lặp cho việc thanh toán
     public int getRandom() {
         Random random = new Random();
         int number;
@@ -928,6 +947,8 @@ public class HomeAdminController implements Initializable {
         return number;
     }
 
+
+    // Kiểm tra và thực hiện thanh toán, bao gồm cả xác nhận in hóa đơn
     public void setCheckPay() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -981,6 +1002,9 @@ public class HomeAdminController implements Initializable {
 
         clearBillProductData();
     }
+
+
+    // Thêm thông tin thanh toán vào cơ sở dữ liệu
     public void setPay(int random){
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -1008,6 +1032,8 @@ public class HomeAdminController implements Initializable {
         }
     }
 
+
+    // Xử lý hành động in hóa đơn và lưu dưới dạng tệp PDF
     public void handlePrintAction(int random ) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save PDF");
@@ -1025,6 +1051,8 @@ public class HomeAdminController implements Initializable {
         }
 
     }
+
+    // Chọn và thay đổi hình ảnh sản phẩm
     public void chooseChangeImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image File");
@@ -1039,6 +1067,9 @@ public class HomeAdminController implements Initializable {
             }
 
         }
+
+
+    // Chọn và thêm hình ảnh sản phẩm
     public void chooseAddImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Image File");
@@ -1057,6 +1088,9 @@ public class HomeAdminController implements Initializable {
             System.out.println(imageUrl);
         }
     }
+
+
+    // Chọn và lưu hình ảnh sản phẩm
     public String chooseImageAndSave() {
         if (urlImage != null && !urlImage.isEmpty()) {
             try {
@@ -1085,11 +1119,14 @@ public class HomeAdminController implements Initializable {
         }
         return null;
     }
+
+
+    // Lấy danh sách khách hàng từ cơ sở dữ liệu và trả về dưới dạng ObservableList
     public ObservableList<CustomerData> customerListData() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
         ObservableList<CustomerData> customerList = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM appmuaban.loginuser";
+        String sql = "SELECT * FROM appmuaban.customer";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -1106,6 +1143,8 @@ public class HomeAdminController implements Initializable {
         return customerList;
     }
 
+
+    // Hiển thị danh sách khách hàng trong TableView
     public void setCustomerTable() {
         ObservableList<CustomerData> showCustomer = customerListData();
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -1113,6 +1152,9 @@ public class HomeAdminController implements Initializable {
         totalSpentCol.setCellValueFactory(new PropertyValueFactory<>("totalSpent"));
         customerTable.setItems(showCustomer);
     }
+
+
+    // Tính tổng số tiền mà khách hàng đã chi tiêu
     public int getTotalSpentByCustomer(String username) {
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDatabase = connectNow.getConnection();
@@ -1132,6 +1174,9 @@ public class HomeAdminController implements Initializable {
         }
         return 0;
     }
+
+
+    // Thêm khách hàng mới vào cơ sở dữ liệu
     public void addCustomer() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -1143,7 +1188,7 @@ public class HomeAdminController implements Initializable {
             return;
         }
 
-        String sql = "INSERT INTO appmuaban.loginuser (USERNAME, PNUMBER) VALUES (?, ?)";
+        String sql = "INSERT INTO appmuaban.customer (USERNAME, PNUMBER) VALUES (?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
@@ -1158,6 +1203,8 @@ public class HomeAdminController implements Initializable {
         setCustomerTable();
     }
 
+
+    // Xóa khách hàng khỏi cơ sở dữ liệu
     public void deleteCustomer() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -1171,9 +1218,9 @@ public class HomeAdminController implements Initializable {
 
         String sql = "";
         if (!name.isEmpty()) {
-            sql = "DELETE FROM appmuaban.loginuser WHERE USERNAME = ?";
+            sql = "DELETE FROM appmuaban.customer WHERE USERNAME = ?";
         } else {
-            sql = "DELETE FROM appmuaban.loginuser WHERE PNUMBER = ?";
+            sql = "DELETE FROM appmuaban.customer WHERE PNUMBER = ?";
         }
 
         try {
@@ -1187,6 +1234,9 @@ public class HomeAdminController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+
+    // Thiết lập trạng thái của các trường nhập liệu khi xóa khách hàng
     public void nameOrIDCus() {
         CusNameDELETE.textProperty().addListener((observableValue, s, t1) -> {
             CusPNumDELETE.setDisable(!t1.trim().isEmpty());
