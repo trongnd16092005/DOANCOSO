@@ -8,31 +8,21 @@ public class ProductData {
     private int price;
     private String image;
 
-    public ProductData(int ID, String name, String manufacturer, int quantity, int price) {
+    public ProductData(int ID, String name, String manufacturer, int quantity, int price, String image) {
         this.ID = ID;
         this.name = name;
         this.manufacturer = manufacturer;
         this.quantity = quantity;
         this.price = price;
+        this.image = image;
+    }
+
+    public ProductData(int ID, String name, String manufacturer, int quantity, int price) {
+        this(ID, name, manufacturer, quantity, price, null);
     }
 
     public ProductData(int ID, String name, String manufacturer, int price, String image) {
-        this.ID = ID;
-        this.name = name;
-        this.manufacturer = manufacturer;
-        this.price = price;
-        this.image = image;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public ProductData() {
+        this(ID, name, manufacturer, 0, price, image);
     }
 
     public int getID() {
@@ -73,5 +63,13 @@ public class ProductData {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

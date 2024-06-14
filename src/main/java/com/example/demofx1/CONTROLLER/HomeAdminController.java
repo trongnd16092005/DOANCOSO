@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -403,6 +404,26 @@ public class HomeAdminController implements Initializable {
     }
 
     // Lấy danh sách sản phẩm từ cơ sở dữ liệu
+    public void setProductTable() {
+        ObservableList<ProductData> showProduct = productListData();
+        idProductCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        nameProductCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        manufacturerCol.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
+        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        // Sử dụng ButtonCell cho cột image
+        imageCol.setCellValueFactory(new PropertyValueFactory<>("image"));
+        imageCol.setCellFactory(new Callback<TableColumn<ProductData, String>, TableCell<ProductData, String>>() {
+            @Override
+            public TableCell<ProductData, String> call(TableColumn<ProductData, String> param) {
+                return new ButtonCell();
+            }
+        });
+
+        productTable.setItems(showProduct);
+    }
+
+    // Lấy danh sách sản phẩm từ cơ sở dữ liệu
     public ObservableList<ProductData> productListData() {
         DataBaseConnection dataBaseConnection = new DataBaseConnection();
         Connection connection = dataBaseConnection.getConnection();
@@ -412,11 +433,13 @@ public class HomeAdminController implements Initializable {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                ProductData productData = new ProductData(resultSet.getInt("ID"),
+                ProductData productData = new ProductData(
+                        resultSet.getInt("ID"),
                         resultSet.getString("NAME"),
                         resultSet.getString("MANUFACTURER"),
                         resultSet.getInt("PRICE"),
-                        resultSet.getString("IMAGE"));
+                        resultSet.getString("IMAGE")
+                );
                 productList.add(productData);
             }
         } catch (Exception e) {
@@ -425,26 +448,15 @@ public class HomeAdminController implements Initializable {
         return productList;
     }
 
-    // Thiết lập bảng sản phẩm với dữ liệu từ cơ sở dữ liệu
-    public void setProductTable() {
-        ObservableList<ProductData> showProduct = productListData();
-        idProductCol.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        nameProductCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        manufacturerCol.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
-        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-        imageCol.setCellValueFactory(new PropertyValueFactory<>("image"));
-        productTable.setItems(showProduct);
-    }
-
     // Xử lý sự kiện chuyển đổi giữa các tab (Thu nhập, Sản phẩm, POS, Khách hàng)
     public void switchPane(ActionEvent event) {
-        if (event.getSource() == income) {
+        if (event.getSource() == income) {//Thu nhập
             incomePane.setVisible(true);
             productsPane.setVisible(false);
             POSPane.setVisible(false);
             CustomerPane.setVisible(false);
         }
-        if (event.getSource() == products) {
+        if (event.getSource() == products) {//Sản phẩm
             productsPane.setVisible(true);
             incomePane.setVisible(false);
             POSPane.setVisible(false);
@@ -462,7 +474,7 @@ public class HomeAdminController implements Initializable {
             setProductTable();
 
         }
-        if (event.getSource() == addProBut) {
+        if (event.getSource() == addProBut) {//Nút thêm sản phẩm
             deleteProPane.setVisible(false);
             addProPane.setVisible(true);
             deleteProBut.setDisable(false);
@@ -475,7 +487,7 @@ public class HomeAdminController implements Initializable {
             addImageView.setImage(null);
             clearProductPane();
         }
-        if (event.getSource() == deleteProBut) {
+        if (event.getSource() == deleteProBut) {//Nút xóa sản phẩm
             deleteProPane.setVisible(true);
             addProPane.setVisible(false);
             deleteProBut.setDisable(true);
@@ -488,7 +500,7 @@ public class HomeAdminController implements Initializable {
             addImageView.setImage(null);
             clearProductPane();
         }
-        if (event.getSource() == changeProBut) {
+        if (event.getSource() == changeProBut) {//Nút thay đổi thông số sản phẩm
             addProPane.setVisible(false);
             deleteProPane.setVisible(false);
             changeProPane.setVisible(true);
@@ -501,30 +513,34 @@ public class HomeAdminController implements Initializable {
             addImageView.setImage(null);
             clearProductPane();
         }
-        if (event.getSource() == POS) {
+        if (event.getSource() == POS) {//Điểm bán hàng
             incomePane.setVisible(false);
             productsPane.setVisible(false);
             POSPane.setVisible(true);
             CustomerPane.setVisible(false);
             menuDisplayCard();
         }
-        if(event.getSource()==customerBut){
+        if(event.getSource()==customerBut){//Khách hàng
+            clearProductPane();
             incomePane.setVisible(false);
             productsPane.setVisible(false);
             POSPane.setVisible(false);
             CustomerPane.setVisible(true);
             addCusBut.setDisable(true);
             deleteCusBut.setDisable(false);
+
             setCustomerTable();
         }
-        if(event.getSource()==deleteCusBut){
+        if(event.getSource()==deleteCusBut){//Xóa khách hàng
+            clearProductPane();
             deleteCusPane.setVisible(true);
             ADDCusPane.setVisible(false);
             addCusBut.setDisable(false);
             deleteCusBut.setDisable(true);
 
         }
-        if(event.getSource()==addCusBut){
+        if(event.getSource()==addCusBut){//Thêm khách hàng
+            clearProductPane();
             deleteCusPane.setVisible(false);
             ADDCusPane.setVisible(true);
             addCusBut.setDisable(true);
@@ -682,21 +698,30 @@ public class HomeAdminController implements Initializable {
 
     // Xóa nội dung các trường nhập liệu của sản phẩm
     public void clearProductPane() {
+        //Sản phẩm
         nameADDText.setText("");
         IDADDText.setText("");
         manufacturerText.setText("");
         priceADDText.setText("");;
         alertDELETEPro.setText("");
 
+        //Sản phẩm
         IDDELETEText.setText("");
         nameDELETEText.setText("");
         alertADDPro.setText("");
 
+        //Sản phẩm
         nameChangeText.setText("");
         IDChangeText.setText("");
         changeManufacturerText.setText("");
         priceChangeText.setText("");
         alertChangePro.setText("");
+
+        //Khách hàng
+        ADDCusName.setText("");
+        ADDCusPNum.setText("");
+        CusPNumDELETE.setText("");
+        CusNameDELETE.setText("");
     }
 
 

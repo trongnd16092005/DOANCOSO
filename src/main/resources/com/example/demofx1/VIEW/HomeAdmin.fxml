@@ -185,7 +185,7 @@
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="productsPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                              <AnchorPane fx:id="productsPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                                  <children>
                                     <AnchorPane layoutX="1.6" layoutY="1.6" prefHeight="181.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                                        <children>
@@ -336,14 +336,14 @@
                                     </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane fx:id="CustomerPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                              <AnchorPane fx:id="CustomerPane" layoutX="25.0" layoutY="68.0" prefHeight="527.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                                  <children>
                                     <AnchorPane layoutX="1.6" layoutY="1.6" prefHeight="181.0" prefWidth="854.0" style="-fx-border-radius: 4; -fx-border-style: dashed; -fx-border-color: #b4b4b4;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                                        <children>
                                           <AnchorPane fx:id="deleteCusPane" layoutX="-137.0" layoutY="45.0" prefHeight="164.0" prefWidth="590.0" style="-fx-border-radius: 4; -fx-background-color: #f0f0f0; -fx-background-radius: 4; -fx-border-color: #b4b4b4; -fx-border-style: dashed;" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="11.0">
                                              <children>
-                                                <TextField fx:id="CusNameDELETE" layoutX="22.0" layoutY="35.0" prefHeight="50.0" prefWidth="209.0" promptText="NAME" />
-                                                <TextField fx:id="CusPNumDELETE" layoutX="303.0" layoutY="35.0" prefHeight="50.0" prefWidth="209.0" promptText="PHONE NUMBER" />
+                                                <TextField fx:id="CusNameDELETE" layoutX="14.0" layoutY="37.0" prefHeight="50.0" prefWidth="209.0" promptText="NAME" AnchorPane.topAnchor="37.0" />
+                                                <TextField fx:id="CusPNumDELETE" layoutX="303.0" layoutY="35.0" prefHeight="50.0" prefWidth="209.0" promptText="PHONE NUMBER" AnchorPane.leftAnchor="304.0" AnchorPane.rightAnchor="77.59999999999991" AnchorPane.topAnchor="36.0" />
                                                 <Button fx:id="confirmDELETECus" layoutX="448.0" layoutY="91.0" mnemonicParsing="false" onAction="#deleteCustomer" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="90.0">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
@@ -359,8 +359,8 @@
                                           </AnchorPane>
                                           <AnchorPane fx:id="ADDCusPane" layoutX="14.0" layoutY="12.0" minWidth="590.0" prefHeight="159.0" prefWidth="361.0" style="-fx-border-radius: 4; -fx-background-color: #f0f0f0; -fx-background-radius: 4; -fx-border-color: #b4b4b4; -fx-border-style: dashed;" visible="false" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="11.0">
                                              <children>
-                                                <TextField fx:id="ADDCusName" layoutX="45.0" layoutY="25.0" prefHeight="50.0" prefWidth="209.0" promptText="NAME" />
-                                                <TextField fx:id="ADDCusPNum" layoutX="325.0" layoutY="23.0" prefHeight="50.0" prefWidth="209.0" promptText="PHONE NUMBER" />
+                                                <TextField fx:id="ADDCusName" layoutX="14.0" layoutY="37.0" prefHeight="50.0" prefWidth="209.0" promptText="NAME" AnchorPane.topAnchor="36.8" />
+                                                <TextField fx:id="ADDCusPNum" layoutX="325.0" layoutY="23.0" prefHeight="50.0" prefWidth="209.0" promptText="PHONE NUMBER" AnchorPane.leftAnchor="304.0" AnchorPane.rightAnchor="77.59999999999991" AnchorPane.topAnchor="36.0" />
                                                 <Button fx:id="confirmADDCus" layoutX="449.0" layoutY="92.0" mnemonicParsing="false" onAction="#addCustomer" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #ffa500;" text="Confirm" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="90.0">
                                                    <font>
                                                       <Font name="System Bold" size="12.0" />
